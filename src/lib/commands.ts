@@ -142,7 +142,7 @@ function ls(path: string, ctx: CommandContext): OutputLine[] {
   const parts = path.replace(/\/+$/, '').split('/').filter(Boolean);
   let dir = FILESYSTEM;
 
-  if (parts.length === 0 || (parts.length === 1 && parts[0] === '')) {
+  if (parts.length === 0 || parts[0] === '' || parts[0] === '.') {
     const entries = Object.keys(FILESYSTEM);
     return entries.map(k => {
       const isDir = typeof FILESYSTEM[k] === 'object';
@@ -222,15 +222,17 @@ function renderNeofetch(ctx: CommandContext): OutputLine[] {
       html: `<div class="neofetch">
 <pre class="neofetch-ascii">${tux}</pre>
 <ul class="neofetch-info">
-<li><strong>user</strong>@<strong>portfolio</strong></li>
+<li><strong>ahmed</strong>@<strong>omarchy</strong></li>
 <li><strong>OS</strong>: Arch Linux x86_64</li>
-<li><strong>Host</strong>: Custom Workstation</li>
-<li><strong>Kernel</strong>: 6.14.x-arch1-1</li>
-<li><strong>Shell</strong>: zsh 5.9</li>
-<li><strong>Terminal</strong>: cool-retro-term</li>
-<li><strong>CPU</strong>: AMD Ryzen 7 5700X (8) @ 3.6GHz</li>
-<li><strong>GPU</strong>: NVIDIA GeForce RTX 3070</li>
-<li><strong>Memory</strong>: 4096MiB / 32000MiB</li>
+<li><strong>Host</strong>: omarchy</li>
+<li><strong>Kernel</strong>: 6.19.10-arch1-1</li>
+<li><strong>Shell</strong>: bash 5.3.9</li>
+<li><strong>Terminal</strong>: kitty</li>
+<li><strong>DE</strong>: Hyprland</li>
+<li><strong>CPU</strong>: AMD Ryzen 5 3600 (6C/12T)</li>
+<li><strong>GPU</strong>: NVIDIA GeForce RTX 4060</li>
+<li><strong>Memory</strong>: 10240MiB / 15360MiB</li>
+<li><strong>Packages</strong>: 1254 (pacman)</li>
 <li><strong>Theme</strong>: ${ctx.theme}</li>
 </ul></div>`,
       type: 'raw',
