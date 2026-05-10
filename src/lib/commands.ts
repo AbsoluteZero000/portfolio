@@ -17,16 +17,19 @@ type CommandMap = Record<string, CommandHandler>;
 
 const FILESYSTEM: Record<string, Record<string, string>> = {
   about: {
-    '.': `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.`,
+    '.': `readme.txt  motd`,
+    'readme.txt': `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.
+
+When I'm not chasing down memory leaks or arguing about tabs vs spaces, you'll find me deep in the Linux rabbit hole — distro hopping, tweaking my dotfiles, or preaching the gospel of Arch to anyone who'll listen.`,
+    'motd': `"If it compiles, ship it. If it breaks, git blame." — Me, probably`,
   },
   skills: {
-    '.': `Languages: Java, Go, Python, C/C++, JavaScript
-Frameworks: Spring Boot, Spring Security, Spring Data JPA, FastAPI, Gin, Fiber
-Databases: PostgreSQL, MySQL, MongoDB, OracleDB
-Cloud & DevOps: AWS (CCP Certified), Docker, Kubernetes, Ansible, Jenkins, CI/CD, Linux
-Architecture: Microservices, RESTful APIs, SOLID, Design Patterns, MVC, Kafka
-Testing: JUnit, Mockito, ISTQB CTFL Certified
-Tools: Git/GitHub, IntelliJ IDEA, Neovim, VS Code, Claude Code`,
+    '.': `languages.txt  frameworks.txt  databases.txt  devops.txt  vibes.txt`,
+    'languages.txt': `Java · Go · Python · C/C++ · JavaScript · TypeScript`,
+    'frameworks.txt': `Spring Boot · Spring Security · Spring Data JPA · FastAPI · Gin · Fiber`,
+    'databases.txt': `PostgreSQL · MySQL · MongoDB · OracleDB · Redis`,
+    'devops.txt': `Docker · Kubernetes · Ansible · Jenkins · AWS (CCP Certified) · CI/CD · Linux`,
+    'vibes.txt': `Arch Linux · Hyprland · Neovim > VS Code · dotfiles addict · 1254 packages (pacman) · tabs > spaces? who cares · CLI or GTFO`,
   },
   experience: {
     '.': `adres     (directory)
@@ -125,12 +128,16 @@ const HELP_TEXT = `Available commands:
 
 const WHOOAMI_TEXT = `Ahmed Wael Wanas
 Backend Software Engineer
+Linux enthusiast · CLI Master · Distro hopper (settled on Omarchy)
+
 Java · Go · Python · Distributed Systems
 
 Giza, Egypt
 Email: ahmedwaelwanas@gmail.com
 GitHub: github.com/AbsoluteZero000
-LinkedIn: linkedin.com/in/ahmedwaelwanas`;
+LinkedIn: linkedin.com/in/ahmedwaelwanas
+
+"I break things so you don't have to."`;
 
 const EMAIL_TEXT = `Email:   ahmedwaelwanas@gmail.com
 Phone:   +201009693563
@@ -196,11 +203,20 @@ function cat(path: string, ctx: CommandContext): OutputLine[] {
     return dir.split('\n').map(line => ({ html: line, type: 'raw' as const }));
   }
 
-  const entry = parts.length >= 2 && dir[parts[1]] ? dir[parts[1]] : dir['.'];
-
-  if (!entry) {
-    return [{ html: `cat: ${path}: Is a directory`, type: 'error' }];
+  if (parts.length >= 2) {
+    const entry = dir[parts[1]];
+    if (!entry) {
+      return [{ html: `cat: ${path}: No such file or directory`, type: 'error' }];
+    }
+    return entry.split('\n').map(line => ({ html: line, type: 'raw' as const }));
   }
+
+  const readme = dir['readme.txt'] || dir['README.txt'] || dir['readme'] || dir['README'];
+  if (readme) {
+    return readme.split('\n').map(line => ({ html: line, type: 'raw' as const }));
+  }
+
+  return [{ html: `cat: ${path}: Is a directory`, type: 'error' }];
 
   return entry.split('\n').map(line => ({ html: line, type: 'raw' as const }));
 }
