@@ -1,0 +1,44 @@
+---
+import { THEMES } from '../lib/themes';
+---
+
+<button class="terminal-statusbar-button" id="theme-btn" title="Cycle themes (T)">
+  <span id="theme-indicator">
+    <span class="terminal-theme-dot" style="background: #00ff41"></span>
+    green
+  </span>
+</button>
+
+<script>
+  import { getCurrentTheme, applyTheme, getNextTheme, THEMES } from '../lib/themes';
+
+  const btn = document.getElementById('theme-btn')!;
+  const indicator = document.getElementById('theme-indicator')!;
+
+  function update() {
+    const theme = getCurrentTheme();
+    const t = THEMES.find(t => t.id === theme);
+    if (t) {
+      indicator.innerHTML = `<span class="terminal-theme-dot" style="background:${t.dot}"></span> ${t.label}`;
+    }
+  }
+
+  btn.addEventListener('click', () => {
+    const current = getCurrentTheme();
+    const next = getNextTheme(current);
+    applyTheme(next);
+    update();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 't' && !e.ctrlKey && !e.metaKey && !(e.target instanceof HTMLInputElement)) {
+      const current = getCurrentTheme();
+      const next = getNextTheme(current);
+      applyTheme(next);
+      update();
+    }
+  });
+
+  const observer = new MutationObserver(update);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+</script>

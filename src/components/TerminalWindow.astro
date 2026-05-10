@@ -1,0 +1,81 @@
+---
+import ThemeSwitcher from './ThemeSwitcher.astro';
+---
+
+<div class="terminal">
+  <div class="terminal-titlebar">
+    <div class="terminal-dots">
+      <span class="terminal-dot terminal-dot--close"></span>
+      <span class="terminal-dot terminal-dot--minimize"></span>
+      <span class="terminal-dot terminal-dot--maximize"></span>
+    </div>
+    <span class="terminal-title">ahmed@portfolio — bash — 80×24</span>
+  </div>
+
+  <div class="terminal-body">
+    <div class="terminal-output" id="terminal-output">
+      <div class="terminal-line terminal-line--system">Booting sequence initiated...</div>
+      <div class="terminal-line terminal-line--system">Loading kernel...</div>
+      <div class="terminal-line terminal-line--system">Mounting filesystems...</div>
+      <div class="terminal-line terminal-line--system">Starting shell...</div>
+      <div class="terminal-line terminal-line--raw"></div>
+      <div class="terminal-line terminal-line--success crt-glow-strong">Welcome to ahmed@portfolio</div>
+      <div class="terminal-line terminal-line--info">Type 'help' to get started.</div>
+      <div class="terminal-line terminal-line--raw"></div>
+    </div>
+
+    <div class="terminal-input-container">
+      <span class="terminal-prompt crt-glow">ahmed@portfolio:~$</span>
+      <input
+        type="text"
+        class="terminal-input"
+        id="terminal-input"
+        placeholder="type a command..."
+        autofocus
+        spellcheck="false"
+        autocomplete="off"
+      />
+    </div>
+  </div>
+
+  <div class="terminal-statusbar">
+    <span>
+      <span id="clock"></span>
+    </span>
+    <div class="terminal-statusbar-right">
+      <span class="terminal-statusbar-button" id="github-btn" title="Open GitHub">
+        GitHub
+      </span>
+      <span class="terminal-statusbar-button" id="linkedin-btn" title="Open LinkedIn">
+        LinkedIn
+      </span>
+      <ThemeSwitcher />
+    </div>
+  </div>
+</div>
+
+<script>
+  import { initTerminal, updateThemeIndicator } from '../lib/interactive';
+
+  const output = document.getElementById('terminal-output')!;
+  const input = document.getElementById('terminal-input') as HTMLInputElement;
+
+  initTerminal(output, input);
+
+  document.getElementById('github-btn')!.addEventListener('click', () => {
+    window.open('https://github.com/AbsoluteZero000', '_blank');
+  });
+
+  document.getElementById('linkedin-btn')!.addEventListener('click', () => {
+    window.open('https://www.linkedin.com/in/ahmedwaelwanas', '_blank');
+  });
+
+  function updateClock() {
+    const now = new Date();
+    const time = now.toLocaleTimeString('en-US', { hour12: false });
+    const clock = document.getElementById('clock');
+    if (clock) clock.textContent = time;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>

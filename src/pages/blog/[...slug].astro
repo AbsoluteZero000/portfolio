@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<BaseLayout>
+  <main class="blog-listing">
+    <div class="terminal-titlebar" style="margin-top: 0;">
+      <div class="terminal-dots">
+        <a href="/portfolio/" class="terminal-dot terminal-dot--close" title="Back to terminal"></a>
+        <span class="terminal-dot terminal-dot--minimize"></span>
+        <span class="terminal-dot terminal-dot--maximize"></span>
+      </div>
+      <span class="terminal-title">ahmed@portfolio: ~/var/log — bash — 80×24</span>
+    </div>
+
+    <article class="blog-content">
+      <div class="terminal-line terminal-line--system">
+        ahmed@portfolio:~$ <span class="crt-glow">cat /var/log/${post.slug}.log</span>
+      </div>
+      <div class="terminal-line terminal-line--blank"></div>
+      <div class="terminal-line terminal-line--heading crt-glow">${post.data.title}</div>
+      <div class="terminal-line terminal-line--system" style="margin-bottom: 16px;">
+        ${post.data.date.toISOString().split('T')[0]} — ${post.data.tags?.join(', ') || ''}
+      </div>
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 16px 0;" />
+      <Content />
+      <hr style="border: none; border-top: 1px solid var(--border); margin: 32px 0;" />
+      <div class="terminal-line terminal-line--info">
+        <a href="/portfolio/blog/" class="terminal-link">cd /var/log</a>
+        &nbsp;|&nbsp;
+        <a href="/portfolio/" class="terminal-link">cd ~</a>
+      </div>
+    </article>
+  </main>
+</BaseLayout>

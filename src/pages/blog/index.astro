@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => data.published);
+posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout>
+  <main class="blog-listing">
+    <div class="terminal-titlebar" style="margin-top: 0;">
+      <div class="terminal-dots">
+        <a href="/portfolio/" class="terminal-dot terminal-dot--close" title="Back to terminal"></a>
+        <span class="terminal-dot terminal-dot--minimize"></span>
+        <span class="terminal-dot terminal-dot--maximize"></span>
+      </div>
+      <span class="terminal-title">ahmed@portfolio: ~/var/log — bash — 80×24</span>
+    </div>
+
+    <div class="terminal-output" style="max-width: 720px; margin: 0 auto;">
+      <div class="terminal-line terminal-line--system">ahmed@portfolio:~$ <span class="crt-glow">ls /var/log/</span></div>
+      <div class="terminal-line terminal-line--raw"></div>
+
+      {posts.length === 0 && (
+        <div class="terminal-line terminal-line--info">No log entries found.</div>
+      )}
+
+      {posts.map((post) => (
+        <div class="blog-entry">
+          <span class="blog-entry-date">{post.data.date.toISOString().split('T')[0]}</span>
+          <a href={`/portfolio/blog/${post.slug}/`} class="blog-entry-title">
+            {post.data.title}
+          </a>
+        </div>
+      ))}
+
+      <div class="terminal-line terminal-line--raw" style="margin-top: 24px;"></div>
+      <div class="terminal-line terminal-line--info">
+        <a href="/portfolio/" class="terminal-link">cd ~ &amp;&amp; exit</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
