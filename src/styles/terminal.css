@@ -103,7 +103,7 @@ html, body {
 }
 
 .terminal-line--prompt {
-  color: var(--fg);
+  color: var(--prompt);
 }
 
 .terminal-line--error {

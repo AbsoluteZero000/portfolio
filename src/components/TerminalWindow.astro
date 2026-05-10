@@ -44,11 +44,17 @@ import ThemeSwitcher from './ThemeSwitcher.astro';
       </div>
       <div class="terminal-line terminal-line--raw"></div>
       <div class="terminal-line terminal-line--info">
-        <span class="crt-glow">❯</span> Type <strong style="color: var(--accent);">help</strong> for available commands
-        <span style="color: var(--fg-dim);">  ·  </span>
-        <span class="crt-glow">T</span> to cycle themes
-        <span style="color: var(--fg-dim);">  ·  </span>
-        <span class="crt-glow">❯</span> Try <strong style="color: var(--accent);">neofetch</strong>, <strong style="color: var(--accent);">ls projects/</strong>, <strong style="color: var(--accent);">cat skills</strong>
+        <span style="font-size: 1.1rem;">
+          <span class="crt-glow-strong">❯</span>
+          <strong><span class="terminal-link crt-glow-strong" data-cmd="ls projects/" style="color: var(--accent); font-size: 1.1rem;">projects/</span></strong>
+          <span style="color: var(--fg-dim);">  ·  </span>
+          <strong><span class="terminal-link crt-glow-strong" data-cmd="ls experience/" style="color: var(--accent); font-size: 1.1rem;">experience/</span></strong>
+          <span style="color: var(--fg-dim);">  ·  </span>
+          <strong><span class="terminal-link crt-glow-strong" data-cmd="cat skills" style="color: var(--accent); font-size: 1.1rem;">skills</span></strong>
+        </span>
+      </div>
+      <div class="terminal-line terminal-line--info" style="margin-top: 4px;">
+        <span style="color: var(--fg-dim);">Type <span class="terminal-link" data-cmd="help">help</span> for all commands  ·  Press <span class="crt-glow">T</span> to cycle themes</span>
       </div>
       <div class="terminal-line terminal-line--raw"></div>
     </div>

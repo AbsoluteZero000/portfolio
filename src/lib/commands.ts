@@ -15,27 +15,33 @@ interface CommandContext {
 
 type CommandMap = Record<string, CommandHandler>;
 
-const FILESYSTEM: Record<string, Record<string, string>> = {
-  about: {
-    '.': `readme.txt  motd`,
-    'readme.txt': `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.
+export const FILESYSTEM: Record<string, string | Record<string, string>> = {
+  about: `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.
 
-When I'm not chasing down memory leaks or arguing about tabs vs spaces, you'll find me deep in the Linux rabbit hole — distro hopping, tweaking my dotfiles, or preaching the gospel of Arch to anyone who'll listen.`,
-    'motd': `"If it compiles, ship it. If it breaks, git blame." — Me, probably`,
-  },
-  skills: {
-    '.': `languages.txt  frameworks.txt  databases.txt  devops.txt  vibes.txt`,
-    'languages.txt': `Java · Go · Python · C/C++ · JavaScript · TypeScript`,
-    'frameworks.txt': `Spring Boot · Spring Security · Spring Data JPA · FastAPI · Gin · Fiber`,
-    'databases.txt': `PostgreSQL · MySQL · MongoDB · OracleDB · Redis`,
-    'devops.txt': `Docker · Kubernetes · Ansible · Jenkins · AWS (CCP Certified) · CI/CD · Linux`,
-    'vibes.txt': `Arch Linux · Hyprland · Neovim > VS Code · dotfiles addict · 1254 packages (pacman) · tabs > spaces? who cares · CLI or GTFO`,
-  },
+When I'm not chasing down memory leaks or arguing about tabs vs spaces, you'll find me deep in the Linux rabbit hole — distro hopping, tweaking my dotfiles, or preaching the gospel of Arch to anyone who'll listen.
+
+"If it compiles, ship it. If it breaks, git blame." — Me, probably`,
+
+  skills: `Languages:
+  Java · Go · Python · C/C++ · JavaScript · TypeScript
+
+Frameworks:
+  Spring Boot · Spring Security · Spring Data JPA · FastAPI · Gin · Fiber
+
+Databases:
+  PostgreSQL · MySQL · MongoDB · OracleDB · Redis
+
+Cloud & DevOps:
+  Docker · Kubernetes · Ansible · Jenkins · AWS (CCP Certified) · CI/CD · Linux
+
+Vibes:
+  Arch Linux · Hyprland · Neovim > VS Code · dotfiles addict · 1254 packages (pacman) · who cares · CLI`,
+
   experience: {
-    '.': `adres     (directory)
-military  (directory)
-eventec   (directory)
-depi      (directory)`,
+    '.': `adres
+military
+eventec
+depi`,
     'adres': `Software Engineer | Adres
 Dec 2025 - Present | Amman, Jordan (Remote)
 
@@ -64,11 +70,11 @@ Apr 2024 - Oct 2024 | Cairo, Egypt
 • Built Jenkins CI/CD pipelines for automated build, test, and deployment`,
   },
   projects: {
-    '.': `code-execution-system/  (dir)
-e-payment-simulator/    (dir)
-crunch/                 (dir)
-codegen/                (dir)
-envicutor/              (dir)`,
+    '.': `code-execution-system
+e-payment-simulator
+crunch
+codegen
+envicutor`,
     'code-execution-system': `Code Execution System
 Stack: Rust, JavaScript
 
@@ -110,21 +116,21 @@ GitHub: https://github.com/envicutor/envicutor`,
   },
 };
 
-const HELP_TEXT = `Available commands:
-  whoami       Display user information
-  neofetch     System information (the cool way)
-  ls           List files and directories
-  cat <file>   Display file contents
-  blog         List blog posts
-  theme        Show current theme
-  theme <name> Switch theme (green, amber, blue, matrix, dracula)
-  email        Show contact information
-  github       Open GitHub profile
-  linkedin     Open LinkedIn profile
-  clear        Clear the terminal
-  sudo         Try it and see
-  exit         Close the connection
-  help         Show this message`;
+const COMMAND_HELP: { cmd: string; desc: string }[] = [
+  { cmd: 'whoami', desc: 'Display user information' },
+  { cmd: 'neofetch', desc: 'System information (the cool way)' },
+  { cmd: 'ls', desc: 'List files and directories' },
+  { cmd: 'cat', desc: 'Display file contents' },
+  { cmd: 'blog', desc: 'List blog posts' },
+  { cmd: 'theme', desc: 'Show or change theme' },
+  { cmd: 'email', desc: 'Show contact information' },
+  { cmd: 'github', desc: 'Open GitHub profile' },
+  { cmd: 'linkedin', desc: 'Open LinkedIn profile' },
+  { cmd: 'clear', desc: 'Clear the terminal' },
+  { cmd: 'sudo', desc: 'Escalate privileges (not really)' },
+  { cmd: 'exit', desc: 'Close the connection' },
+  { cmd: 'help', desc: 'Show this message' },
+];
 
 const WHOOAMI_TEXT = `Ahmed Wael Wanas
 Backend Software Engineer
@@ -145,25 +151,75 @@ GitHub:  https://github.com/AbsoluteZero000
 LinkedIn: https://www.linkedin.com/in/ahmedwaelwanas
 LeetCode: https://leetcode.com/u/ahmedwaelwanas/`;
 
+export function getAllCompletions(): string[] {
+  const items: string[] = [];
+
+  for (const cmd of Object.keys(COMMANDS)) {
+    items.push(cmd);
+    items.push(`${cmd} `);
+  }
+
+  function walk(dir: Record<string, string>, prefix: string) {
+    for (const key of Object.keys(dir)) {
+      if (key === '.') continue;
+      items.push(`cat ${prefix}/${key}`);
+    }
+  }
+
+  for (const name of Object.keys(FILESYSTEM)) {
+    const entry = FILESYSTEM[name];
+    if (typeof entry === 'string') {
+      items.push(`cat ${name}`);
+    } else if (entry) {
+      items.push(`ls ${name}/`);
+      walk(entry, name);
+    }
+  }
+
+  return [...new Set(items)].sort();
+}
+
+function cmdSpan(cmd: string, label?: string): string {
+  const text = label || cmd;
+  return `<span class="terminal-link" data-cmd="${cmd}">${text}</span>`;
+}
+
+function lsDir(
+  dirName: string,
+  dir: Record<string, string>,
+  parentPath: string,
+): OutputLine[] {
+  const keys = Object.keys(dir).filter(k => k !== '.');
+  if (keys.length === 0) {
+    return [{ html: '(empty directory)', type: 'info' }];
+  }
+  return keys.map(k => {
+    const isDir = typeof dir[k] === 'object' && dir[k] !== null;
+    const fullPath = `${parentPath}/${k}`;
+    const action = isDir ? `ls ${fullPath}/` : `cat ${fullPath}`;
+    const display = isDir ? `${k}/` : k;
+    return { html: cmdSpan(action, display), type: 'raw' as const };
+  });
+}
+
 function ls(path: string, ctx: CommandContext): OutputLine[] {
   const parts = path.replace(/\/+$/, '').split('/').filter(Boolean);
-  let dir = FILESYSTEM;
 
   if (parts.length === 0 || parts[0] === '' || parts[0] === '.') {
-    const entries = Object.keys(FILESYSTEM);
-    return entries.map(k => {
-      const isDir = typeof FILESYSTEM[k] === 'object';
+    return Object.keys(FILESYSTEM).map(k => {
+      const entry = FILESYSTEM[k];
+      const isDir = typeof entry === 'object';
       const display = isDir ? `${k}/` : k;
-      const cls = isDir ? '' : ' style="color: var(--fg)"';
+      const action = isDir ? `ls ${k}/` : `cat ${k}`;
       return {
-        html: `<span${cls}>${display}</span>`,
+        html: cmdSpan(action, display),
         type: 'raw' as const,
       };
     });
   }
 
   const target = parts[0];
-  const entry = dir[target];
+  const entry = FILESYSTEM[target];
 
   if (!entry) {
     return [{ html: `ls: cannot access '${path}': No such file or directory`, type: 'error' }];
@@ -174,8 +230,7 @@ function ls(path: string, ctx: CommandContext): OutputLine[] {
   }
 
   if (parts.length === 1) {
-    const content = entry['.'] || Object.keys(entry).filter(k => k !== '.').join('  ');
-    return [{ html: content, type: 'raw' }];
+    return lsDir(target, entry, target);
   }
 
   const sub = entry[parts[1]];
@@ -216,9 +271,12 @@ function cat(path: string, ctx: CommandContext): OutputLine[] {
     return readme.split('\n').map(line => ({ html: line, type: 'raw' as const }));
   }
 
-  return [{ html: `cat: ${path}: Is a directory`, type: 'error' }];
+  const listing = dir['.'];
+  if (listing) {
+    return listing.split('\n').map(line => ({ html: line, type: 'raw' as const }));
+  }
 
-  return entry.split('\n').map(line => ({ html: line, type: 'raw' as const }));
+  return [{ html: `cat: ${path}: Is a directory`, type: 'error' }];
 }
 
 function renderNeofetch(ctx: CommandContext): OutputLine[] {
@@ -233,9 +291,8 @@ function renderNeofetch(ctx: CommandContext): OutputLine[] {
     '           \\/',
   ].join('\n');
 
-  const lines: OutputLine[] = [
-    {
-      html: `<div class="neofetch">
+  return [{
+    html: `<div class="neofetch">
 <pre class="neofetch-ascii">${tux}</pre>
 <ul class="neofetch-info">
 <li><strong>ahmed</strong>@<strong>omarchy</strong></li>
@@ -251,16 +308,25 @@ function renderNeofetch(ctx: CommandContext): OutputLine[] {
 <li><strong>Packages</strong>: 1254 (pacman)</li>
 <li><strong>Theme</strong>: ${ctx.theme}</li>
 </ul></div>`,
-      type: 'raw',
-    },
-  ];
-
-  return lines;
+    type: 'raw',
+  }];
 }
 
 export const COMMANDS: CommandMap = {
   help: {
-    fn: () => HELP_TEXT.split('\n').map(line => ({ html: line, type: 'info' as const })),
+    fn: () => {
+      const lines: OutputLine[] = [
+        { html: 'Available commands:', type: 'info' },
+      ];
+      for (const { cmd, desc } of COMMAND_HELP) {
+        const padding = ' '.repeat(Math.max(1, 16 - cmd.length));
+        lines.push({
+          html: `&nbsp;&nbsp;${cmdSpan(cmd)}${padding}${desc}`,
+          type: 'raw' as const,
+        });
+      }
+      return lines;
+    },
     description: 'Show available commands',
     usage: 'help',
   },
@@ -271,7 +337,7 @@ export const COMMANDS: CommandMap = {
   },
   neofetch: {
     fn: (_, ctx) => renderNeofetch(ctx),
-    description: 'Display system information',
+    description: 'System information (the cool way)',
     usage: 'neofetch',
   },
   ls: {

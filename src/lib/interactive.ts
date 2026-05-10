@@ -1,5 +1,5 @@
-import { executeCommand, type OutputLine } from './commands';
-import { getCurrentTheme, applyTheme, getNextTheme, THEMES } from './themes';
+import { executeCommand, getAllCompletions, type OutputLine } from './commands';
+import { getCurrentTheme, applyTheme, THEMES } from './themes';
 
 interface TerminalState {
   history: Array<{ cmd: string; output: OutputLine[] }>;
@@ -22,6 +22,18 @@ export function initTerminal(
     currentInput: '',
   };
 
+  let completions: string[] = [];
+  let completionIndex = -1;
+
+  function loadCompletions() {
+    try {
+      completions = getAllCompletions();
+    } catch {
+      completions = [];
+    }
+  }
+  loadCompletions();
+
   function appendOutput(lines: OutputLine[]) {
     for (const line of lines) {
       const div = document.createElement('div');
@@ -43,7 +55,7 @@ export function initTerminal(
     }
   }
 
-  function handleCommand(input: string) {
+  function submitCommand(input: string) {
     const trimmed = input.trim();
     if (!trimmed) return;
 
@@ -53,8 +65,7 @@ export function initTerminal(
 
     const promptLine = document.createElement('div');
     promptLine.className = 'terminal-line terminal-line--prompt';
-    const theme = getCurrentTheme();
-    promptLine.innerHTML = `<span class="crt-glow">ahmed@portfolio:~$</span> ${escHtml(trimmed)}`;
+    promptLine.innerHTML = `<span class="crt-glow-strong">ahmed@portfolio:~$</span> ${escHtml(trimmed)}`;
     outputEl.appendChild(promptLine);
 
     if (trimmed.toLowerCase() === 'clear') {
@@ -78,15 +89,79 @@ export function initTerminal(
     return div.innerHTML;
   }
 
+  function findCompletions(prefix: string): string[] {
+    if (!prefix) return completions;
+    const lower = prefix.toLowerCase();
+    return completions.filter(c => c.toLowerCase().startsWith(lower));
+  }
+
+  function handleTab(e: KeyboardEvent) {
+    const value = inputEl.value;
+
+    if (completionIndex >= 0) {
+      const fullList = findCompletions(value);
+      if (fullList.length > 0) {
+        completionIndex = (completionIndex + 1) % fullList.length;
+        inputEl.value = fullList[completionIndex];
+        return;
+      }
+    }
+
+    const matches = findCompletions(value);
+
+    if (matches.length === 0) return;
+
+    if (matches.length === 1) {
+      inputEl.value = matches[0] + ' ';
+      completionIndex = -1;
+      return;
+    }
+
+    const commonPrefix = getCommonPrefix(matches);
+    if (commonPrefix.length > value.length) {
+      inputEl.value = commonPrefix;
+      completionIndex = -1;
+      return;
+    }
+
+    completionIndex = -1;
+    const promptLine = document.createElement('div');
+    promptLine.className = 'terminal-line terminal-line--raw';
+    promptLine.style.color = 'var(--fg-dim)';
+    promptLine.textContent = matches.join('  ');
+    outputEl.appendChild(promptLine);
+    outputEl.scrollTop = outputEl.scrollHeight;
+  }
+
+  function getCommonPrefix(strings: string[]): string {
+    if (strings.length === 0) return '';
+    let prefix = strings[0];
+    for (let i = 1; i < strings.length; i++) {
+      while (strings[i].indexOf(prefix) !== 0) {
+        prefix = prefix.slice(0, -1);
+        if (prefix === '') return '';
+      }
+    }
+    return prefix;
+  }
+
   inputEl.addEventListener('keydown', (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
+      completionIndex = -1;
       const value = inputEl.value;
       inputEl.value = '';
-      handleCommand(value);
+      submitCommand(value);
+      return;
+    }
+
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      handleTab(e);
       return;
     }
 
     if (e.key === 'ArrowUp') {
+      completionIndex = -1;
       e.preventDefault();
       if (state.historyIndex > 0) {
         if (state.historyIndex === state.history.length) {
@@ -99,6 +174,7 @@ export function initTerminal(
     }
 
     if (e.key === 'ArrowDown') {
+      completionIndex = -1;
       e.preventDefault();
       if (state.historyIndex < state.history.length) {
         state.historyIndex++;
@@ -111,9 +187,7 @@ export function initTerminal(
       return;
     }
 
-    if (e.key === 'Tab') {
-      e.preventDefault();
-    }
+    completionIndex = -1;
   });
 
   inputEl.addEventListener('focus', () => {
@@ -122,6 +196,20 @@ export function initTerminal(
 
   document.addEventListener('click', () => {
     setTimeout(() => inputEl.focus(), 0);
+  });
+
+  outputEl.addEventListener('click', (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const cmdEl = target.closest('[data-cmd]') as HTMLElement | null;
+    if (!cmdEl) return;
+
+    e.stopPropagation();
+    const cmd = cmdEl.getAttribute('data-cmd');
+    if (!cmd) return;
+
+    inputEl.value = '';
+    completionIndex = -1;
+    submitCommand(cmd);
   });
 
   setTimeout(() => inputEl.focus(), 100);
