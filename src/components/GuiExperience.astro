@@ -1,0 +1,21 @@
+---
+import { PORTFOLIO } from '../lib/portfolio';
+---
+
+<section class="gui-section" id="experience">
+  <h2 class="gui-section-title">experience</h2>
+  <div class="gui-exp-list">
+    {PORTFOLIO.experience.map(exp => (
+      <div class="gui-exp-item">
+        <div class="gui-exp-header">
+          <div class="gui-exp-role">{exp.role}</div>
+          <div class="gui-exp-company">{exp.company}</div>
+          <div class="gui-exp-meta">{exp.period} &middot; {exp.location}</div>
+        </div>
+        <ul class="gui-exp-highlights">
+          {exp.highlights.map(h => <li>{h}</li>)}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>

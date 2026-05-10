@@ -1,0 +1,31 @@
+<span class="mode-toggle-cli">
+  <button class="terminal-statusbar-button mode-toggle-btn" title="Switch to GUI mode">
+    GUI Mode
+  </button>
+</span>
+<span class="mode-toggle-gui">
+  <button class="gui-mode-toggle mode-toggle-btn" title="Switch to terminal mode">
+    CLI Mode
+  </button>
+</span>
+
+<style is:global>
+  [data-mode="cli"] .mode-toggle-gui { display: none !important; }
+  [data-mode="gui"] .mode-toggle-cli { display: none !important; }
+
+  .gui-mode-toggle {
+    background: #f5f5f4;
+    border: 1px solid #d6d3d1;
+    color: #44403c;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .gui-mode-toggle:hover {
+    background: #e7e5e4;
+  }
+</style>

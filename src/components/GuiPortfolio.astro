@@ -1,0 +1,31 @@
+---
+import GuiHero from './GuiHero.astro';
+import GuiSkills from './GuiSkills.astro';
+import GuiExperience from './GuiExperience.astro';
+import GuiProjects from './GuiProjects.astro';
+import GuiContact from './GuiContact.astro';
+import ModeToggle from './ModeToggle.astro';
+import { PORTFOLIO } from '../lib/portfolio';
+---
+
+<div class="gui-wrapper">
+  <nav class="gui-nav">
+    <span class="gui-nav-brand">{PORTFOLIO.name.toLowerCase()}</span>
+    <div class="gui-nav-links">
+      <a href="#skills">skills</a>
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+      <button class="gui-theme-toggle" id="gui-theme-toggle" title="Toggle dark mode">☾</button>
+      <ModeToggle />
+    </div>
+  </nav>
+
+  <div class="gui-container">
+    <GuiHero />
+    <GuiSkills />
+    <GuiExperience />
+    <GuiProjects />
+    <GuiContact />
+  </div>
+</div>

@@ -1,3 +1,5 @@
+import { PORTFOLIO } from './portfolio';
+
 export interface OutputLine {
   html: string;
   type: 'system' | 'info' | 'error' | 'success' | 'heading' | 'separator' | 'warning' | 'raw' | 'prompt';
@@ -15,104 +17,53 @@ interface CommandContext {
 
 type CommandMap = Record<string, CommandHandler>;
 
-export const FILESYSTEM: Record<string, string | Record<string, string>> = {
-  about: `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.
+const aboutText = `${PORTFOLIO.summary}
 
 When I'm not chasing down memory leaks or arguing about tabs vs spaces, you'll find me deep in the Linux rabbit hole — distro hopping, tweaking my dotfiles, or preaching the gospel of Arch to anyone who'll listen.
 
-"If it compiles, ship it. If it breaks, git blame." — Me, probably`,
+${PORTFOLIO.motd}`;
 
-  skills: `Languages:
-  Java · Go · Python · C/C++ · JavaScript · TypeScript
+const skillsText = PORTFOLIO.skills.map(s =>
+  `${s.category}:\n  ${s.items.join(' · ')}`
+).join('\n\n');
 
-Frameworks:
-  Spring Boot · Spring Security · Spring Data JPA · FastAPI · Gin · Fiber
+const expList = PORTFOLIO.experience.map(e =>
+  e.company.toLowerCase().replace(/\s+/g, '-')
+);
 
-Databases:
-  PostgreSQL · MySQL · MongoDB · OracleDB · Redis
+const expEntries: Record<string, string> = {};
+expList.forEach((key, i) => {
+  const e = PORTFOLIO.experience[i];
+  expEntries[key] = `${e.role} | ${e.company}
+${e.period} | ${e.location}
 
-Cloud & DevOps:
-  Docker · Kubernetes · Ansible · Jenkins · AWS (CCP Certified) · CI/CD · Linux
+${e.highlights.map(h => `• ${h}`).join('\n')}`;
+});
 
-Vibes:
-  Arch Linux · Hyprland · Neovim > VS Code · dotfiles addict · 1254 packages (pacman) · who cares · CLI`,
+const projList = PORTFOLIO.projects.map(p =>
+  p.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+);
 
+const projEntries: Record<string, string> = {};
+projList.forEach((key, i) => {
+  const p = PORTFOLIO.projects[i];
+  projEntries[key] = `${p.title}
+Stack: ${p.stack}
+
+${p.description}
+${p.github ? `\nGitHub: ${p.github}` : ''}`;
+});
+
+export const FILESYSTEM: Record<string, string | Record<string, string>> = {
+  about: aboutText,
+  skills: skillsText,
   experience: {
-    '.': `adres
-military
-eventec
-depi`,
-    'adres': `Software Engineer | Adres
-Dec 2025 - Present | Amman, Jordan (Remote)
-
-• Developed and maintained a production-grade real estate platform for Sharjah
-• Wrote high-quality, scalable Java Spring Boot code in enterprise environment
-• Led performance improvements through Spring framework upgrades and refactoring
-• Integrated database migrations using Flyway for version control
-• Utilized Redis for caching to enhance performance and reduce latency`,
-    'military': `Software Engineer | Military Service
-Dec 2024 - Oct 2025 | Cairo, Egypt
-
-• Maintained mission-critical full-stack system (PHP Laravel + React)
-• Diagnosed and resolved performance bottlenecks
-• Improved system responsiveness under peak load conditions`,
-    'eventec': `Backend Intern | Eventec
-Aug 2024 - Oct 2024 | Cairo, Egypt
-
-• Rebuilt company backend using Python FastAPI and MongoDB
-• Re-architected multi-tenant MongoDB schema reducing query overhead
-• Integrated CI/CD pipelines and API optimizations`,
-    'depi': `DevOps Trainee | Digital Egypt Pioneers Initiative
-Apr 2024 - Oct 2024 | Cairo, Egypt
-
-• Designed and deployed containerized apps using Docker and Kubernetes
-• Automated infrastructure provisioning with Ansible on AWS
-• Built Jenkins CI/CD pipelines for automated build, test, and deployment`,
+    '.': expList.join('\n'),
+    ...expEntries,
   },
   projects: {
-    '.': `code-execution-system
-e-payment-simulator
-crunch
-codegen
-envicutor`,
-    'code-execution-system': `Code Execution System
-Stack: Rust, JavaScript
-
-Architected a sandboxed backend system for secure, isolated code execution,
-handling dynamic dependency resolution at runtime without manual setup.
-Designed for fault tolerance and security-first operation.
-
-GitHub: https://github.com/envicutor/envicutor`,
-    'e-payment-simulator': `E-Payment Simulator
-Stack: Java, Spring Boot
-
-Designed and implemented an e-payment backend using Java and Spring Boot.
-Applied Factory and Strategy patterns for extensible payment provider logic.
-Achieved high test coverage with JUnit and Mockito.
-
-GitHub: https://github.com/sda-assignment/sda-assignment`,
-    'crunch': `Crunch
-Stack: Go
-
-Command-line file compression tool using Huffman encoding for efficient,
-lossless compression. Features a sleek terminal UI built with Lip Gloss.
-
-GitHub: https://github.com/AbsoluteZero000/crunch`,
-    'codegen': `Codegen
-Stack: Go, OpenRouter AI
-
-A terminal-based AI coding assistant inspired by Claude Code using Go
-and OpenRouter streaming APIs. Real-time token streaming, tool invocation,
-and conversational agent workflows.
-
-GitHub: https://github.com/AbsoluteZero000/codegen`,
-    'envicutor': `Envicutor
-Stack: Rust, JavaScript
-
-A sandboxed code execution environment for running untrusted code securely.
-Handles dynamic dependency resolution and provides isolated execution contexts.
-
-GitHub: https://github.com/envicutor/envicutor`,
+    '.': projList.join('\n'),
+    ...projEntries,
   },
 };
 
@@ -132,24 +83,20 @@ const COMMAND_HELP: { cmd: string; desc: string }[] = [
   { cmd: 'help', desc: 'Show this message' },
 ];
 
-const WHOOAMI_TEXT = `Ahmed Wael Wanas
-Backend Software Engineer
-Linux enthusiast · CLI Master · Distro hopper (settled on Omarchy)
+const WHOOAMI_TEXT = `${PORTFOLIO.name}
+${PORTFOLIO.title}
+${PORTFOLIO.whoamiExtras}
 
-Java · Go · Python · Distributed Systems
+${PORTFOLIO.location}
+Email: ${PORTFOLIO.email}
+GitHub: ${PORTFOLIO.social.github}
+LinkedIn: ${PORTFOLIO.social.linkedin}`;
 
-Giza, Egypt
-Email: ahmedwaelwanas@gmail.com
-GitHub: github.com/AbsoluteZero000
-LinkedIn: linkedin.com/in/ahmedwaelwanas
-
-"I break things so you don't have to."`;
-
-const EMAIL_TEXT = `Email:   ahmedwaelwanas@gmail.com
-Phone:   +201009693563
-GitHub:  https://github.com/AbsoluteZero000
-LinkedIn: https://www.linkedin.com/in/ahmedwaelwanas
-LeetCode: https://leetcode.com/u/ahmedwaelwanas/`;
+const EMAIL_TEXT = `Email:   ${PORTFOLIO.email}
+Phone:   ${PORTFOLIO.phone}
+GitHub:  ${PORTFOLIO.social.github}
+LinkedIn: ${PORTFOLIO.social.linkedin}
+LeetCode: ${PORTFOLIO.social.leetcode}`;
 
 export function getAllCompletions(): string[] {
   const items: string[] = [];
@@ -295,9 +242,9 @@ function renderNeofetch(ctx: CommandContext): OutputLine[] {
     html: `<div class="neofetch">
 <pre class="neofetch-ascii">${tux}</pre>
 <ul class="neofetch-info">
-<li><strong>ahmed</strong>@<strong>omarchy</strong></li>
+<li><strong>${PORTFOLIO.name.split(' ')[0].toLowerCase()}</strong>@<strong>${PORTFOLIO.hostname}</strong></li>
 <li><strong>OS</strong>: Arch Linux x86_64</li>
-<li><strong>Host</strong>: omarchy</li>
+<li><strong>Host</strong>: ${PORTFOLIO.hostname}</li>
 <li><strong>Kernel</strong>: 6.19.10-arch1-1</li>
 <li><strong>Shell</strong>: bash 5.3.9</li>
 <li><strong>Terminal</strong>: kitty</li>
@@ -371,7 +318,7 @@ export const COMMANDS: CommandMap = {
   github: {
     fn: () => [
       { html: 'Opening GitHub profile...', type: 'system' },
-      { html: '<a href="https://github.com/AbsoluteZero000" class="terminal-link" target="_blank">https://github.com/AbsoluteZero000</a>', type: 'raw' },
+      { html: `<a href="${PORTFOLIO.social.github}" class="terminal-link" target="_blank">${PORTFOLIO.social.github}</a>`, type: 'raw' },
     ],
     description: 'Open GitHub profile',
     usage: 'github',
@@ -379,7 +326,7 @@ export const COMMANDS: CommandMap = {
   linkedin: {
     fn: () => [
       { html: 'Opening LinkedIn profile...', type: 'system' },
-      { html: '<a href="https://www.linkedin.com/in/ahmedwaelwanas" class="terminal-link" target="_blank">https://www.linkedin.com/in/ahmedwaelwanas</a>', type: 'raw' },
+      { html: `<a href="${PORTFOLIO.social.linkedin}" class="terminal-link" target="_blank">${PORTFOLIO.social.linkedin}</a>`, type: 'raw' },
     ],
     description: 'Open LinkedIn profile',
     usage: 'linkedin',
