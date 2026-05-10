@@ -159,6 +159,15 @@ html, body {
   caret-color: var(--fg);
 }
 
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.1em;
+  background: var(--fg);
+  vertical-align: text-bottom;
+  flex-shrink: 0;
+}
+
 .terminal-input::placeholder {
   color: var(--fg-dim);
   opacity: 0.5;
@@ -450,11 +459,7 @@ html, body {
 
 /* Links in terminal */
 .tech-highlight {
-  color: var(--accent);
-  background: rgba(0, 255, 65, 0.08);
-  padding: 0 3px;
-  border-radius: 2px;
-  font-weight: 500;
+  color: var(--accent-dim);
 }
 
 .terminal-link {
@@ -466,7 +471,7 @@ html, body {
   text-decoration: underline;
 }
 
-[data-mode="terminal"] :focus-visible {
+[data-mode="terminal"] :focus-visible:not(.terminal-input) {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }

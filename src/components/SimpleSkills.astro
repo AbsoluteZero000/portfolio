@@ -5,7 +5,7 @@ import { PORTFOLIO } from '../lib/portfolio';
 <section class="gui-section" id="skills">
   <h2 class="gui-section-title">skills</h2>
   <div class="gui-skills-grid">
-    {PORTFOLIO.skills.map(cat => (
+    {PORTFOLIO.skills.filter(cat => cat.category !== 'Vibes').map(cat => (
       <div class="gui-skills-category">
         <h3>{cat.category}</h3>
         <div class="gui-skills-tags">

@@ -212,7 +212,7 @@ function cat(path: string, ctx: CommandContext): OutputLine[] {
   }
 
   if (typeof dir === 'string') {
-    return dir.split('\n').map(line => ({ html: line, type: 'raw' as const }));
+    return dir.split('\n').map(line => ({ html: line, type: detectLineType(line) }));
   }
 
   if (parts.length >= 2) {
@@ -220,7 +220,7 @@ function cat(path: string, ctx: CommandContext): OutputLine[] {
     if (!entry) {
       return [{ html: `cat: ${path}: No such file or directory`, type: 'error' }];
     }
-    return entry.split('\n').map(line => ({ html: line, type: 'raw' as const }));
+    return entry.split('\n').map(line => ({ html: line, type: detectLineType(line) }));
   }
 
   const readme = dir['readme.txt'] || dir['README.txt'] || dir['readme'] || dir['README'];
@@ -230,10 +230,23 @@ function cat(path: string, ctx: CommandContext): OutputLine[] {
 
   const listing = dir['.'];
   if (listing) {
-    return listing.split('\n').map(line => ({ html: line, type: 'raw' as const }));
+    return listing.split('\n').map(line => ({ html: line, type: detectLineType(line) }));
   }
 
   return [{ html: `cat: ${path}: Is a directory`, type: 'error' }];
+}
+
+function detectLineType(line: string): OutputLine['type'] {
+  const t = line.trim();
+  if (!t) return 'raw';
+  if (t.startsWith('─')) return 'separator';
+  if (t.includes('•') || t.startsWith('•')) return 'raw';
+  if (t.match(/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s/)) return 'info';
+  if (t.includes('|')) {
+    if (t.match(/^\w+\s\d{4}/) || t.match(/^\d{4}/)) return 'info';
+    return 'heading';
+  }
+  return 'raw';
 }
 
 function renderNeofetch(ctx: CommandContext): OutputLine[] {
@@ -293,8 +306,8 @@ function renderProjectCards(): OutputLine[] {
   for (const p of PORTFOLIO.projects) {
     const slug = p.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
     const namePart = ` ${slug} `;
-    const dashes = '─'.repeat(Math.max(0, boxWidth - 2 - namePart.length));
-    lines.push({ html: `┌─${namePart}${dashes}┐`, type: 'raw' });
+    const dashes = '─'.repeat(Math.max(0, boxWidth - 3 - namePart.length));
+    lines.push({ html: `┌─${namePart}${dashes}┐`, type: 'heading' });
 
     const descLines = wrapText(p.description, innerWidth);
     for (const dl of descLines) {
@@ -306,15 +319,16 @@ function renderProjectCards(): OutputLine[] {
     lines.push({ html: `│ ${''.padEnd(innerWidth)} │`, type: 'raw' });
 
     const stack = `Stack: ${p.stack}`;
-    lines.push({ html: `│ ${stack.padEnd(innerWidth)} │`, type: 'raw' });
+    lines.push({ html: `│ ${stack.padEnd(innerWidth)} │`, type: 'info' });
 
-    const githubLink = p.github
-      ? `<a href="${p.github}" class="terminal-link" target="_blank">GitHub ↗</a>`
-      : '';
-    const bottom = githubLink ? ` ${githubLink}` : '';
-    lines.push({ html: `│ ${bottom.padEnd(innerWidth)} │`, type: 'raw' });
+    if (p.github) {
+      const linkHtml = `<a href="${p.github}" class="terminal-link" target="_blank">GitHub ↗</a>`;
+      const linkLabel = ' GitHub ↗';
+      const pad = ' '.repeat(innerWidth - linkLabel.length);
+      lines.push({ html: `│ ${linkHtml}${pad} │`, type: 'raw' });
+    }
 
-    lines.push({ html: `└${'─'.repeat(boxWidth - 2)}┘`, type: 'raw' });
+    lines.push({ html: `└${'─'.repeat(boxWidth - 2)}┘`, type: 'separator' });
     lines.push({ html: '', type: 'raw' });
   }
 
