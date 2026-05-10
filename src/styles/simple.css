@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════
-   GUI MODE — normal website layout
+   SIMPLE MODE — normal website layout
    ═══════════════════════════════════════════ */
 
 :root {
@@ -17,7 +17,7 @@
   --gui-selection: rgba(0, 255, 65, 0.3);
 }
 
-[data-gui-theme="dark"] {
+[data-simple-theme="dark"] {
   --gui-bg: #0c0a09;
   --gui-surface: #1c1917;
   --gui-text: #fafaf9;
@@ -32,18 +32,13 @@
   --gui-selection: rgba(0, 255, 65, 0.3);
 }
 
-[data-mode="gui"] html,
-[data-mode="gui"] body {
+[data-mode="simple"] html,
+[data-mode="simple"] body {
   overflow: hidden !important;
   height: 100% !important;
 }
 
-[data-mode="gui"] .terminal,
-[data-mode="gui"] .crt-overlay {
-  display: none !important;
-}
-
-[data-mode="cli"] .gui-wrapper {
+[data-mode="simple"] .crt-overlay {
   display: none !important;
 }
 
@@ -121,12 +116,69 @@
   margin: 0 0 16px;
 }
 
+.gui-hero-tagline {
+  color: var(--gui-text-muted);
+  font-size: 1rem;
+  margin: 0 0 24px;
+  max-width: 600px;
+}
+
 .gui-hero-summary {
   color: var(--gui-text-muted);
   max-width: 600px;
   margin: 0 0 24px;
   font-size: 0.95rem;
   line-height: 1.7;
+}
+
+.gui-hero-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.gui-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.gui-cta--primary {
+  background: var(--gui-accent);
+  color: #ffffff;
+  border: 1px solid var(--gui-accent);
+}
+
+.gui-cta--primary:hover {
+  opacity: 0.9;
+}
+
+[data-simple-theme="dark"] .gui-cta--primary {
+  background: transparent;
+  color: var(--gui-accent);
+  border-color: var(--gui-accent);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+[data-simple-theme="dark"] .gui-cta--primary:hover {
+  background: rgba(0, 255, 65, 0.1);
+}
+
+.gui-cta--secondary {
+  background: transparent;
+  color: var(--gui-text);
+  border: 1px solid var(--gui-border);
+}
+
+.gui-cta--secondary:hover {
+  border-color: var(--gui-text-muted);
 }
 
 .gui-social {
@@ -341,7 +393,7 @@
   color: var(--gui-text);
 }
 
-.gui-theme-toggle {
+.simple-theme-toggle {
   background: none;
   border: 1px solid var(--gui-border);
   color: var(--gui-text-muted);
@@ -353,9 +405,102 @@
   transition: border-color 0.15s, color 0.15s;
 }
 
-.gui-theme-toggle:hover {
+.simple-theme-toggle:hover {
   border-color: var(--gui-border-strong);
   color: var(--gui-text);
+}
+
+/* Sticky CTA bar */
+[data-mode="terminal"] .simple-cta {
+  display: none !important;
+}
+
+.simple-cta {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 200;
+}
+
+.simple-cta a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: var(--gui-surface);
+  border: 1px solid var(--gui-border);
+  border-radius: 6px;
+  color: var(--gui-text-secondary);
+  text-decoration: none;
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.simple-cta a:hover {
+  border-color: var(--gui-border-strong);
+  color: var(--gui-text);
+}
+
+@media (max-width: 640px) {
+  .simple-cta {
+    flex-direction: row;
+    bottom: 12px;
+    right: 12px;
+    left: 12px;
+    justify-content: center;
+  }
+
+  .simple-cta a {
+    flex: 1;
+    justify-content: center;
+    font-size: 11px;
+    padding: 10px 8px;
+  }
+}
+
+/* Crossfade mode transition */
+.terminal,
+.gui-wrapper {
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+[data-mode="simple"] .terminal {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+}
+
+[data-mode="terminal"] .gui-wrapper {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+}
+
+/* prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Tech highlight */
+.tech-highlight {
+  color: var(--gui-accent);
+  font-weight: 500;
+}
+
+/* Focus rings */
+:focus-visible {
+  outline: 2px solid var(--gui-accent);
+  outline-offset: 2px;
 }
 
 /* Responsive */

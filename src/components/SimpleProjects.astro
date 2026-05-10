@@ -1,5 +1,5 @@
 ---
-import { PORTFOLIO } from '../lib/portfolio';
+import { PORTFOLIO, highlightTech } from '../lib/portfolio';
 ---
 
 <section class="gui-section" id="projects">
@@ -9,7 +9,7 @@ import { PORTFOLIO } from '../lib/portfolio';
       <div class="gui-project-card">
         <h3 class="gui-project-title">{p.title}</h3>
         <div class="gui-project-stack">{p.stack}</div>
-        <p class="gui-project-desc">{p.description}</p>
+        <p class="gui-project-desc" set:html={highlightTech(p.description)}></p>
         {p.github && <a href={p.github} class="gui-project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>}
       </div>
     ))}

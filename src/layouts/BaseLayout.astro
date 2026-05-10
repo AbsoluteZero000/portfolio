@@ -1,10 +1,10 @@
 ---
 import '../styles/global.css';
-import '../styles/gui.css';
+import '../styles/simple.css';
 ---
 
 <!doctype html>
-<html lang="en" data-theme="green" data-mode="gui">
+<html lang="en" data-theme="green" data-mode="simple">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,30 +23,30 @@ import '../styles/gui.css';
         var html = document.documentElement;
 
         var mode = localStorage.getItem('portfolio-mode');
-        if (mode === 'cli' || mode === 'gui') {
+        if (mode === 'terminal' || mode === 'simple') {
           html.setAttribute('data-mode', mode);
         }
 
-        var guiTheme = localStorage.getItem('portfolio-gui-theme');
-        if (guiTheme === 'dark' || guiTheme === 'light') {
-          html.setAttribute('data-gui-theme', guiTheme);
+        var simpleTheme = localStorage.getItem('portfolio-simple-theme');
+        if (simpleTheme === 'dark' || simpleTheme === 'light') {
+          html.setAttribute('data-simple-theme', simpleTheme);
         } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          html.setAttribute('data-gui-theme', 'dark');
+          html.setAttribute('data-simple-theme', 'dark');
         }
 
         function toggleMode() {
-          var current = html.getAttribute('data-mode') || 'cli';
-          var next = current === 'cli' ? 'gui' : 'cli';
+          var current = html.getAttribute('data-mode') || 'simple';
+          var next = current === 'simple' ? 'terminal' : 'simple';
           html.setAttribute('data-mode', next);
           localStorage.setItem('portfolio-mode', next);
         }
 
-        function toggleGuiTheme() {
-          var current = html.getAttribute('data-gui-theme') || 'light';
+        function toggleSimpleTheme() {
+          var current = html.getAttribute('data-simple-theme') || 'light';
           var next = current === 'light' ? 'dark' : 'light';
-          html.setAttribute('data-gui-theme', next);
-          localStorage.setItem('portfolio-gui-theme', next);
-          var btn = document.getElementById('gui-theme-toggle');
+          html.setAttribute('data-simple-theme', next);
+          localStorage.setItem('portfolio-simple-theme', next);
+          var btn = document.getElementById('simple-theme-toggle');
           if (btn) btn.textContent = next === 'dark' ? '\u2600' : '\u263E';
         }
 
@@ -54,11 +54,11 @@ import '../styles/gui.css';
           btn.addEventListener('click', toggleMode);
         });
 
-        var guiThemeToggle = document.getElementById('gui-theme-toggle');
-        if (guiThemeToggle) {
-          guiThemeToggle.addEventListener('click', toggleGuiTheme);
-          var currentTheme = html.getAttribute('data-gui-theme') || 'light';
-          guiThemeToggle.textContent = currentTheme === 'dark' ? '\u2600' : '\u263E';
+        var simpleThemeToggle = document.getElementById('simple-theme-toggle');
+        if (simpleThemeToggle) {
+          simpleThemeToggle.addEventListener('click', toggleSimpleTheme);
+          var currentTheme = html.getAttribute('data-simple-theme') || 'light';
+          simpleThemeToggle.textContent = currentTheme === 'dark' ? '\u2600' : '\u263E';
         }
       })();
     </script>

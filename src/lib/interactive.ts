@@ -194,23 +194,26 @@ export function initTerminal(
     outputEl.scrollTop = outputEl.scrollHeight;
   });
 
-  document.addEventListener('click', () => {
+  document.addEventListener('click', (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const cmdEl = target.closest('[data-cmd]') as HTMLElement | null;
+    if (cmdEl) {
+      e.stopPropagation();
+      const cmd = cmdEl.getAttribute('data-cmd');
+      if (!cmd) return;
+      inputEl.value = '';
+      completionIndex = -1;
+      submitCommand(cmd);
+      return;
+    }
     setTimeout(() => inputEl.focus(), 0);
   });
 
-  outputEl.addEventListener('click', (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    const cmdEl = target.closest('[data-cmd]') as HTMLElement | null;
-    if (!cmdEl) return;
-
-    e.stopPropagation();
-    const cmd = cmdEl.getAttribute('data-cmd');
-    if (!cmd) return;
-
-    inputEl.value = '';
-    completionIndex = -1;
-    submitCommand(cmd);
-  });
+  const visited = localStorage.getItem('portfolio-visited');
+  if (!visited) {
+    setTimeout(() => submitCommand('whoami'), 400);
+    localStorage.setItem('portfolio-visited', 'true');
+  }
 
   setTimeout(() => inputEl.focus(), 100);
 }

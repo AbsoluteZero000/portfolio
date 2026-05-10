@@ -1,4 +1,4 @@
-import { PORTFOLIO } from './portfolio';
+import { PORTFOLIO, highlightTech } from './portfolio';
 
 export interface OutputLine {
   html: string;
@@ -37,8 +37,15 @@ expList.forEach((key, i) => {
   expEntries[key] = `${e.role} | ${e.company}
 ${e.period} | ${e.location}
 
-${e.highlights.map(h => `• ${h}`).join('\n')}`;
+${e.highlights.map(h => `• ${highlightTech(h)}`).join('\n')}`;
 });
+
+const allExperienceText = PORTFOLIO.experience.map(e =>
+  `${e.role} | ${e.company}
+${e.period} | ${e.location}
+
+${e.highlights.map(h => `• ${highlightTech(h)}`).join('\n')}`
+).join('\n\n─────────────────────\n\n');
 
 const projList = PORTFOLIO.projects.map(p =>
   p.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -58,7 +65,7 @@ export const FILESYSTEM: Record<string, string | Record<string, string>> = {
   about: aboutText,
   skills: skillsText,
   experience: {
-    '.': expList.join('\n'),
+    '.': allExperienceText,
     ...expEntries,
   },
   projects: {
@@ -177,6 +184,9 @@ function ls(path: string, ctx: CommandContext): OutputLine[] {
   }
 
   if (parts.length === 1) {
+    if (target === 'projects') {
+      return renderProjectCards();
+    }
     return lsDir(target, entry, target);
   }
 
@@ -259,6 +269,58 @@ function renderNeofetch(ctx: CommandContext): OutputLine[] {
   }];
 }
 
+function wrapText(text: string, width: number): string[] {
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let current = '';
+  for (const word of words) {
+    if ((current + ' ' + word).trim().length <= width) {
+      current += (current ? ' ' : '') + word;
+    } else {
+      if (current) lines.push(current);
+      current = word;
+    }
+  }
+  if (current) lines.push(current);
+  return lines;
+}
+
+function renderProjectCards(): OutputLine[] {
+  const lines: OutputLine[] = [];
+  const boxWidth = 62;
+  const innerWidth = boxWidth - 4;
+
+  for (const p of PORTFOLIO.projects) {
+    const slug = p.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    const namePart = ` ${slug} `;
+    const dashes = '─'.repeat(Math.max(0, boxWidth - 2 - namePart.length));
+    lines.push({ html: `┌─${namePart}${dashes}┐`, type: 'raw' });
+
+    const descLines = wrapText(p.description, innerWidth);
+    for (const dl of descLines) {
+      const highlighted = highlightTech(dl);
+      const padding = ' '.repeat(Math.max(0, innerWidth - dl.length));
+      lines.push({ html: `│ ${highlighted}${padding} │`, type: 'raw' });
+    }
+
+    lines.push({ html: `│ ${''.padEnd(innerWidth)} │`, type: 'raw' });
+
+    const stack = `Stack: ${p.stack}`;
+    lines.push({ html: `│ ${stack.padEnd(innerWidth)} │`, type: 'raw' });
+
+    const githubLink = p.github
+      ? `<a href="${p.github}" class="terminal-link" target="_blank">GitHub ↗</a>`
+      : '';
+    const bottom = githubLink ? ` ${githubLink}` : '';
+    lines.push({ html: `│ ${bottom.padEnd(innerWidth)} │`, type: 'raw' });
+
+    lines.push({ html: `└${'─'.repeat(boxWidth - 2)}┘`, type: 'raw' });
+    lines.push({ html: '', type: 'raw' });
+  }
+
+  return lines;
+}
+
 export const COMMANDS: CommandMap = {
   help: {
     fn: () => {
@@ -330,6 +392,17 @@ export const COMMANDS: CommandMap = {
     ],
     description: 'Open LinkedIn profile',
     usage: 'linkedin',
+  },
+  contact: {
+    fn: () => EMAIL_TEXT.split('\n').map(line => {
+      const parts = line.split(': ');
+      if (parts.length === 2 && parts[1].startsWith('http')) {
+        return { html: `${parts[0]}: <a href="${parts[1]}" class="terminal-link" target="_blank">${parts[1]}</a>`, type: 'raw' as const };
+      }
+      return { html: line, type: 'raw' as const };
+    }),
+    description: 'Show contact information',
+    usage: 'contact',
   },
   clear: {
     fn: () => [],
