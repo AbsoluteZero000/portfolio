@@ -21,10 +21,12 @@ export interface ProjectEntry {
 export const PORTFOLIO = {
   name: 'Ahmed Wael Wanas',
   title: 'Backend Software Engineer',
+  tagline: 'Building scalable APIs, distributed systems, and cloud-native backends.',
   hostname: 'omarchy',
   location: 'Giza, Egypt',
   email: 'ahmedwaelwanas@gmail.com',
   phone: '+201009693563',
+  resume: '/portfolio/resume.pdf',
   summary: `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.`,
   motd: `"If it compiles, ship it. If it breaks, git blame." — Me, probably`,
   whoamiExtras: `Linux enthusiast · CLI worshipper · Distro hopper (settled on Arch)
@@ -144,3 +146,32 @@ Java · Go · Python · Distributed Systems
     'AWS CCP Certified',
   ],
 };
+
+const SKILL_ITEMS = PORTFOLIO.skills
+  .filter(s => s.category !== 'Vibes')
+  .flatMap(s => s.items);
+
+const STACK_ITEMS = PORTFOLIO.projects.flatMap(p =>
+  p.stack.split(',').map(s => s.trim())
+);
+
+const ALL_TECH = [...new Set([...SKILL_ITEMS, ...STACK_ITEMS])]
+  .sort((a, b) => b.length - a.length);
+
+function escHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function escRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+export function highlightTech(text: string): string {
+  let result = escHtml(text);
+  for (const kw of ALL_TECH) {
+    const escaped = escRegex(kw);
+    const regex = new RegExp(`(?<=^|[^\\w])${escaped}(?=$|[^\\w])`, 'gi');
+    result = result.replace(regex, '<span class="tech-highlight">$&</span>');
+  }
+  return result;
+}

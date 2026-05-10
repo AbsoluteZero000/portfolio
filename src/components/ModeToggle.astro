@@ -1,19 +1,19 @@
-<span class="mode-toggle-cli">
-  <button class="terminal-statusbar-button mode-toggle-btn" title="Switch to GUI mode">
-    GUI Mode
+<span class="mode-toggle-terminal">
+  <button class="terminal-statusbar-button mode-toggle-btn" title="Switch to Simple Mode">
+    Simple Mode
   </button>
 </span>
-<span class="mode-toggle-gui">
-  <button class="gui-mode-toggle mode-toggle-btn" title="Switch to terminal mode">
-    CLI Mode
+<span class="mode-toggle-simple">
+  <button class="simple-mode-toggle mode-toggle-btn" title="Switch to Terminal Mode">
+    Terminal Mode
   </button>
 </span>
 
 <style is:global>
-  [data-mode="cli"] .mode-toggle-gui { display: none !important; }
-  [data-mode="gui"] .mode-toggle-cli { display: none !important; }
+  [data-mode="terminal"] .mode-toggle-simple { display: none !important; }
+  [data-mode="simple"] .mode-toggle-terminal { display: none !important; }
 
-  .gui-mode-toggle {
+  .simple-mode-toggle {
     background: #f5f5f4;
     border: 1px solid #d6d3d1;
     color: #44403c;
@@ -25,7 +25,7 @@
     transition: background 0.15s;
   }
 
-  .gui-mode-toggle:hover {
+  .simple-mode-toggle:hover {
     background: #e7e5e4;
   }
 </style>

@@ -1,0 +1,37 @@
+---
+import SimpleHero from './SimpleHero.astro';
+import SimpleSkills from './SimpleSkills.astro';
+import SimpleExperience from './SimpleExperience.astro';
+import SimpleProjects from './SimpleProjects.astro';
+import SimpleContact from './SimpleContact.astro';
+import ModeToggle from './ModeToggle.astro';
+import { PORTFOLIO } from '../lib/portfolio';
+---
+
+<div class="gui-wrapper">
+  <nav class="gui-nav">
+    <span class="gui-nav-brand">{PORTFOLIO.name.toLowerCase()}</span>
+    <div class="gui-nav-links">
+      <a href="#skills">skills</a>
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#contact">contact</a>
+      <button class="simple-theme-toggle" id="simple-theme-toggle" title="Toggle dark mode">☾</button>
+      <ModeToggle />
+    </div>
+  </nav>
+
+  <div class="gui-container">
+    <SimpleHero />
+    <SimpleSkills />
+    <SimpleExperience />
+    <SimpleProjects />
+    <SimpleContact />
+  </div>
+</div>
+<div class="simple-cta">
+  <a href={PORTFOLIO.resume} target="_blank" rel="noopener noreferrer" aria-label="Download Resume">↓ Resume</a>
+  <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">GitHub</a>
+  <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">LinkedIn</a>
+  <a href={`mailto:${PORTFOLIO.email}`} aria-label="Send email">✉ Email</a>
+</div>

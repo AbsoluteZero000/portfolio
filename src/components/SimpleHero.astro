@@ -5,7 +5,12 @@ import { PORTFOLIO } from '../lib/portfolio';
 <section class="gui-hero">
   <h1>{PORTFOLIO.name}</h1>
   <p class="gui-hero-subtitle">{PORTFOLIO.title}</p>
-  <p class="gui-hero-summary">{PORTFOLIO.summary}</p>
+  <p class="gui-hero-tagline">{PORTFOLIO.tagline}</p>
+  <div class="gui-hero-ctas">
+    <a href="#projects" class="gui-cta gui-cta--primary">View Projects</a>
+    <a href={PORTFOLIO.resume} class="gui-cta gui-cta--secondary" target="_blank" rel="noopener noreferrer">Download Resume</a>
+    <a href="#contact" class="gui-cta gui-cta--secondary">Contact Me</a>
+  </div>
   <div class="gui-social">
     <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
     <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>

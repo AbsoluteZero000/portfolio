@@ -1,5 +1,5 @@
 ---
-import { PORTFOLIO } from '../lib/portfolio';
+import { PORTFOLIO, highlightTech } from '../lib/portfolio';
 ---
 
 <section class="gui-section" id="experience">
@@ -13,7 +13,7 @@ import { PORTFOLIO } from '../lib/portfolio';
           <div class="gui-exp-meta">{exp.period} &middot; {exp.location}</div>
         </div>
         <ul class="gui-exp-highlights">
-          {exp.highlights.map(h => <li>{h}</li>)}
+          {exp.highlights.map(h => <li set:html={highlightTech(h)}></li>)}
         </ul>
       </div>
     ))}

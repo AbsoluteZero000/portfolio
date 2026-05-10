@@ -1,6 +1,7 @@
 ---
 import ThemeSwitcher from './ThemeSwitcher.astro';
 import ModeToggle from './ModeToggle.astro';
+import CommandNav from './CommandNav.astro';
 ---
 
 <div class="terminal">
@@ -13,8 +14,10 @@ import ModeToggle from './ModeToggle.astro';
     <span class="terminal-title">ahmed@portfolio — bash — 80×24</span>
   </div>
 
+  <CommandNav />
+
   <div class="terminal-body">
-    <div class="terminal-output" id="terminal-output">
+    <div class="terminal-output" id="terminal-output" role="log" aria-live="polite">
       <div class="terminal-line terminal-line--system">Last login: Sun May 10 2026 from visiting-portfolio</div>
       <div class="terminal-line terminal-line--raw"></div>
       <div class="terminal-line terminal-line--raw">
