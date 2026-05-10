@@ -1,0 +1,13 @@
+---
+import { PORTFOLIO } from '../lib/portfolio';
+---
+
+<section class="gui-contact" id="contact">
+  <p>Want to get in touch?</p>
+  <div class="gui-contact-links">
+    <a href={`mailto:${PORTFOLIO.email}`}>{PORTFOLIO.email}</a>
+    <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href={PORTFOLIO.social.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>
+  </div>
+</section>

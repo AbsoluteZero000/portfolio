@@ -1,9 +1,10 @@
 ---
 import '../styles/global.css';
+import '../styles/gui.css';
 ---
 
 <!doctype html>
-<html lang="en" data-theme="green">
+<html lang="en" data-theme="green" data-mode="gui">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,10 +12,55 @@ import '../styles/global.css';
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <title>Ahmed Wanas | Portfolio</title>
   </head>
   <body>
     <slot />
     <div class="crt-overlay"></div>
+    <script>
+      (function() {
+        var html = document.documentElement;
+
+        var mode = localStorage.getItem('portfolio-mode');
+        if (mode === 'cli' || mode === 'gui') {
+          html.setAttribute('data-mode', mode);
+        }
+
+        var guiTheme = localStorage.getItem('portfolio-gui-theme');
+        if (guiTheme === 'dark' || guiTheme === 'light') {
+          html.setAttribute('data-gui-theme', guiTheme);
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          html.setAttribute('data-gui-theme', 'dark');
+        }
+
+        function toggleMode() {
+          var current = html.getAttribute('data-mode') || 'cli';
+          var next = current === 'cli' ? 'gui' : 'cli';
+          html.setAttribute('data-mode', next);
+          localStorage.setItem('portfolio-mode', next);
+        }
+
+        function toggleGuiTheme() {
+          var current = html.getAttribute('data-gui-theme') || 'light';
+          var next = current === 'light' ? 'dark' : 'light';
+          html.setAttribute('data-gui-theme', next);
+          localStorage.setItem('portfolio-gui-theme', next);
+          var btn = document.getElementById('gui-theme-toggle');
+          if (btn) btn.textContent = next === 'dark' ? '\u2600' : '\u263E';
+        }
+
+        document.querySelectorAll('.mode-toggle-btn').forEach(function(btn) {
+          btn.addEventListener('click', toggleMode);
+        });
+
+        var guiThemeToggle = document.getElementById('gui-theme-toggle');
+        if (guiThemeToggle) {
+          guiThemeToggle.addEventListener('click', toggleGuiTheme);
+          var currentTheme = html.getAttribute('data-gui-theme') || 'light';
+          guiThemeToggle.textContent = currentTheme === 'dark' ? '\u2600' : '\u263E';
+        }
+      })();
+    </script>
   </body>
 </html>

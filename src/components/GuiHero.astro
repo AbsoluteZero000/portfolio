@@ -1,0 +1,15 @@
+---
+import { PORTFOLIO } from '../lib/portfolio';
+---
+
+<section class="gui-hero">
+  <h1>{PORTFOLIO.name}</h1>
+  <p class="gui-hero-subtitle">{PORTFOLIO.title}</p>
+  <p class="gui-hero-summary">{PORTFOLIO.summary}</p>
+  <div class="gui-social">
+    <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href={PORTFOLIO.social.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>
+    <a href={`mailto:${PORTFOLIO.email}`}>Email</a>
+  </div>
+</section>
