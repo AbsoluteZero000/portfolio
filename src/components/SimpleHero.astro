@@ -3,18 +3,34 @@ import { PORTFOLIO } from '../lib/portfolio';
 ---
 
 <section class="gui-hero">
-  <h1>{PORTFOLIO.name}</h1>
-  <p class="gui-hero-subtitle">{PORTFOLIO.title}</p>
-  <p class="gui-hero-tagline">{PORTFOLIO.tagline}</p>
-  <div class="gui-hero-ctas">
-    <a href="#projects" class="gui-cta gui-cta--primary">View Projects</a>
-    <a href={PORTFOLIO.resume} class="gui-cta gui-cta--secondary" target="_blank" rel="noopener noreferrer">Download Resume</a>
-    <a href="#contact" class="gui-cta gui-cta--secondary">Contact Me</a>
+  <div class="gui-hero-content">
+    <h1>{PORTFOLIO.name}</h1>
+    <p class="gui-hero-subtitle">{PORTFOLIO.title}</p>
+    <p class="gui-hero-tagline">{PORTFOLIO.tagline}</p>
+    <div class="gui-hero-ctas">
+      <a href="#projects" class="gui-cta gui-cta--primary">View Projects</a>
+      <a href={PORTFOLIO.resume} class="gui-cta gui-cta--secondary" target="_blank" rel="noopener noreferrer">Download Resume</a>
+      <a href="#contact" class="gui-cta gui-cta--secondary">Contact Me</a>
+    </div>
+    <div class="gui-social">
+      <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href={PORTFOLIO.social.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>
+      <a href={`mailto:${PORTFOLIO.email}`}>Email</a>
+    </div>
   </div>
-  <div class="gui-social">
-    <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    <a href={PORTFOLIO.social.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>
-    <a href={`mailto:${PORTFOLIO.email}`}>Email</a>
+  <div class="gui-hero-visual" aria-hidden="true">
+    <div class="gui-hero-terminal">
+      <div class="gui-hero-terminal-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">whoami</span></div>
+      <div class="gui-hero-terminal-line gui-hero-output">{PORTFOLIO.name}</div>
+      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">cat tagline</span></div>
+      <div class="gui-hero-terminal-line gui-hero-output">{PORTFOLIO.tagline}</div>
+      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">echo $LOCATION</span></div>
+      <div class="gui-hero-terminal-line gui-hero-output">{PORTFOLIO.location}</div>
+      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">_</span></div>
+    </div>
   </div>
 </section>

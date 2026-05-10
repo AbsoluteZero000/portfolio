@@ -100,6 +100,14 @@
 /* Hero */
 .gui-hero {
   padding: 80px 0 48px;
+  display: flex;
+  align-items: center;
+  gap: 48px;
+}
+
+.gui-hero-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .gui-hero h1 {
@@ -136,6 +144,63 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-bottom: 24px;
+}
+
+/* Hero visual terminal */
+.gui-hero-visual {
+  flex-shrink: 0;
+  width: 320px;
+}
+
+.gui-hero-terminal {
+  background: #1c1917;
+  border: 1px solid #44403c;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+[data-simple-theme="dark"] .gui-hero-terminal {
+  background: #0c0a09;
+  border-color: #292524;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.gui-hero-terminal-dots {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.gui-hero-terminal-dots span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #78716c;
+}
+
+.gui-hero-terminal-dots span:nth-child(1) { background: #ef4444; }
+.gui-hero-terminal-dots span:nth-child(2) { background: #eab308; }
+.gui-hero-terminal-dots span:nth-child(3) { background: #22c55e; }
+
+.gui-hero-terminal-line {
+  overflow: hidden;
+}
+
+.gui-hero-prompt {
+  color: var(--gui-accent);
+}
+
+.gui-hero-cmd {
+  color: #e7e5e4;
+}
+
+.gui-hero-output {
+  color: #a8a29e;
+  padding-left: 12px;
 }
 
 .gui-cta {
@@ -254,6 +319,13 @@
   border-radius: 4px;
   font-size: 13px;
   color: var(--gui-tag-text);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.gui-skill-tag:hover {
+  background: rgba(0, 255, 65, 0.06);
+  border-color: rgba(0, 255, 65, 0.2);
+  color: var(--gui-accent);
 }
 
 /* Experience */
@@ -504,6 +576,18 @@
 }
 
 /* Responsive */
+@media (max-width: 768px) {
+  .gui-hero {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .gui-hero-visual {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
 @media (max-width: 640px) {
   .gui-hero h1 {
     font-size: 2rem;
