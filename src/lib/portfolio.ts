@@ -129,6 +129,12 @@ Java · Go · Python · Distributed Systems
       description: 'A sandboxed code execution environment for running untrusted code securely. Handles dynamic dependency resolution and provides isolated execution contexts.',
       github: 'https://github.com/envicutor/envicutor',
     },
+    {
+      title: 'WhatSend',
+      stack: 'Python, FastAPI, SQLAlchemy, HTMX, APScheduler',
+      description: 'WhatsApp message scheduler with a browser dashboard. Send now or schedule recurring messages via Whapi.Cloud. Features group picker, image upload, per-user timezone, token encryption, and expandable execution logs.',
+      github: 'https://github.com/AbsoluteZero000/whatsend',
+    },
   ],
 
   education: [
