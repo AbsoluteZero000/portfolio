@@ -19,7 +19,7 @@ type CommandMap = Record<string, CommandHandler>;
 
 const aboutText = `${PORTFOLIO.summary}
 
-When I'm not chasing down memory leaks or arguing about tabs vs spaces, you'll find me deep in the Linux rabbit hole — distro hopping, tweaking my dotfiles, or preaching the gospel of Arch to anyone who'll listen.
+When I'm not chasing down memory leaks or arguing about tabs vs spaces, you'll find me deep in the Linux rabbit hole — distro hopping, tweaking my dotfiles, or sharing Arch tips with anyone who'll listen.
 
 ${PORTFOLIO.motd}`;
 

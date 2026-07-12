@@ -29,7 +29,7 @@ export const PORTFOLIO = {
   resume: '/portfolio/resume.pdf',
   summary: `Backend Software Engineer specializing in building high-performance, scalable distributed systems using Java (Spring Boot), Go, and Python. Experienced in microservices architecture, performance optimization, and production-grade backend systems. Graduate with Excellent with Honors in Software Engineering from Cairo University.`,
   motd: `"If it compiles, ship it. If it breaks, git blame." — Me, probably`,
-  whoamiExtras: `Linux enthusiast · CLI worshipper · Distro hopper (settled on Arch)
+  whoamiExtras: `Linux enthusiast · CLI power user · Distro hopper (settled on Arch)
 
 Java · Go · Python · Distributed Systems
 
