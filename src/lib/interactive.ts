@@ -55,6 +55,14 @@ export function initTerminal(
     }
   }
 
+  function processGameLaunch() {
+    const launch = outputEl.querySelector('.game-launch[data-game="invaders"]');
+    if (launch) {
+      launch.removeAttribute('data-game');
+      window.dispatchEvent(new CustomEvent('launch-invaders'));
+    }
+  }
+
   function submitCommand(input: string) {
     const trimmed = input.trim();
     if (!trimmed) return;
@@ -81,6 +89,7 @@ export function initTerminal(
 
     appendOutput(result);
     processThemeSwitch();
+    processGameLaunch();
   }
 
   function escHtml(str: string): string {

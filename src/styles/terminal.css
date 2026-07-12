@@ -558,3 +558,13 @@ html, body {
 
 @media(max-width:720px){[data-mode="terminal"] body{padding:0}.terminal{height:100vh;border:0;border-radius:0}.terminal-session{display:none}.terminal-toolbar{padding:0 12px}.terminal-tab{min-width:130px}.terminal-output{padding:25px 20px}.terminal-welcome{padding:35px 0;gap:22px}.welcome-ascii{font-size:14px}.welcome-copy h1{font-size:2.35rem}.welcome-copy p br{display:none}.terminal-input-container{margin:0 16px 16px}.terminal-prompt span{display:none}.terminal-statusbar-right{gap:0}}
 @media(max-width:480px){.terminal-title{text-align:right}.terminal-welcome{align-items:flex-start;flex-direction:column}.welcome-ascii{display:none}.welcome-copy h1{font-size:2.65rem}.welcome-meta{gap:7px 12px}.terminal-hint{line-height:1.8}.terminal-hint>span{display:block;margin-bottom:3px}.terminal-statusbar-button{padding:4px}.terminal-statusbar-right #github-btn,.terminal-statusbar-right #linkedin-btn{display:none}.terminal-prompt{font-size:0}.terminal-prompt::before{font-size:13px;margin-right:0}.neofetch{flex-direction:column}.neofetch-ascii{font-size:9px}}
+
+/* Hidden arcade */
+.game-overlay[hidden] { display:none; }
+.game-overlay { position:fixed; inset:0; z-index:10000; display:grid; place-items:center; padding:20px; background:rgba(2,7,5,.82); backdrop-filter:blur(10px); }
+.game-window { width:min(760px,100%); overflow:hidden; border:1px solid var(--accent-dim); border-radius:8px; background:#09110e; box-shadow:0 35px 100px #000,0 0 45px color-mix(in srgb,var(--accent) 15%,transparent); }
+.game-header,.game-footer { min-height:38px; display:flex; align-items:center; gap:24px; padding:0 14px; color:#71847b; background:#0d1713; font:10px "JetBrains Mono",monospace; text-transform:uppercase; letter-spacing:.08em; border-bottom:1px solid #1b342a; }
+.game-header>span:first-child { color:#57d99e; margin-right:auto; }.game-header b{color:#f4c84a}.game-header button{width:26px;height:26px;border:0;background:transparent;color:#71847b;font:18px/1 inherit;cursor:pointer}.game-header button:hover{color:#ff7252}
+.game-window canvas { display:block; width:100%; height:auto; aspect-ratio:720/440; touch-action:none; cursor:crosshair; }
+.game-footer { justify-content:center; border-top:1px solid #1b342a; border-bottom:0; }
+@media(max-width:540px){.game-overlay{padding:8px}.game-footer{gap:10px;font-size:7px}.game-header{font-size:8px}}

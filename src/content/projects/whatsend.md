@@ -1,9 +1,11 @@
 ---
 title: WhatSend
-description: WhatsApp message scheduler with a browser dashboard — send now or schedule recurring messages via Whapi.Cloud
-tags: [Python, FastAPI, SQLAlchemy, HTMX, APScheduler, Whapi.Cloud]
+description: Production-ready WhatsApp automation platform for instant, scheduled, recurring, and on-demand group messaging
+tags: [Python, FastAPI, SQLAlchemy, HTMX, APScheduler, Docker, Fly.io, Whapi.Cloud]
 githubUrl: https://github.com/AbsoluteZero000/whatsend
 order: 0
 ---
 
-Built a full-stack WhatsApp scheduling application with FastAPI and SQLAlchemy 2.0, featuring a Jinja2/HTMX dashboard. Supports one-time and recurring scheduling with a user-friendly cron builder (Daily, Weekdays, Weekly with multi-day selection, Monthly). Integrates with Whapi.Cloud API for message sending, with group fetching, image upload (JPEG/PNG/GIF/WebP), per-user timezone support, Fernet-encrypted token storage, and expandable execution logs. Deployed on Fly.io with persistent SQLite storage and always-on APScheduler.
+Built and deployed a full-stack WhatsApp automation platform with FastAPI, async SQLAlchemy 2.0, and a Jinja2/HTMX dashboard. It supports instant, one-time, recurring, and on-demand messaging through Whapi.Cloud, backed by a user-friendly schedule builder rather than raw cron syntax.
+
+The application includes JWT authentication, Fernet-encrypted tokens, per-user timezones, group discovery, image uploads, job cloning and skipping, searchable execution logs, and an authenticated external API. English and Arabic interfaces—including full RTL layout—make it practical for real users. Docker and Fly.io provide an always-on deployment with persistent SQLite storage and APScheduler jobs that survive restarts.

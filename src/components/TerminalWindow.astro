@@ -67,6 +67,14 @@ import CommandNav from './CommandNav.astro';
   </div>
 </div>
 
+<div class="game-overlay" id="game-overlay" hidden aria-hidden="true">
+  <div class="game-window" role="dialog" aria-modal="true" aria-labelledby="game-title">
+    <div class="game-header"><span id="game-title">CHICKEN.EXE</span><span>score <b id="game-score">0000</b></span><button id="game-close" aria-label="Close game">×</button></div>
+    <canvas id="game-canvas" width="720" height="440"></canvas>
+    <div class="game-footer"><span>← → / A D &nbsp; move</span><span>SPACE &nbsp; fire</span><span>ESC &nbsp; quit</span></div>
+  </div>
+</div>
+
 <script>
   import { initTerminal, updateThemeIndicator } from '../lib/interactive';
 
@@ -91,4 +99,64 @@ import CommandNav from './CommandNav.astro';
   }
   updateClock();
   setInterval(updateClock, 1000);
+
+  const gameOverlay = document.getElementById('game-overlay')!;
+  const canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
+  const scoreEl = document.getElementById('game-score')!;
+  const gameClose = document.getElementById('game-close')!;
+  let stopGame: (() => void) | null = null;
+
+  function launchInvaders() {
+    stopGame?.();
+    gameOverlay.hidden = false;
+    gameOverlay.setAttribute('aria-hidden', 'false');
+    const ctx = canvas.getContext('2d')!;
+    const keys = new Set<string>();
+    let frame = 0, score = 0, running = true, lastShot = 0;
+    const player = { x: canvas.width / 2 - 22, y: canvas.height - 48, w: 44, h: 18 };
+    let shots: Array<{x:number,y:number}> = [];
+    let eggs: Array<{x:number,y:number}> = [];
+    let chickens = Array.from({ length: 18 }, (_, i) => ({ x: 65 + (i % 6) * 100, y: 55 + Math.floor(i / 6) * 62, alive: true, phase: i }));
+
+    const down = (e: KeyboardEvent) => { keys.add(e.key.toLowerCase()); if ([' ','arrowleft','arrowright'].includes(e.key.toLowerCase())) e.preventDefault(); if (e.key === 'Escape') closeGame(); };
+    const up = (e: KeyboardEvent) => keys.delete(e.key.toLowerCase());
+    const point = (e: PointerEvent) => { const r=canvas.getBoundingClientRect(); player.x=Math.max(8,Math.min(canvas.width-player.w-8,(e.clientX-r.left)*(canvas.width/r.width)-player.w/2)); };
+    const tap = (e: PointerEvent) => { point(e); shots.push({x:player.x+21,y:player.y}); };
+    window.addEventListener('keydown', down); window.addEventListener('keyup', up);
+    canvas.addEventListener('pointermove', point); canvas.addEventListener('pointerdown', tap);
+
+    function closeGame() { running = false; window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); canvas.removeEventListener('pointermove', point); canvas.removeEventListener('pointerdown', tap); gameOverlay.hidden = true; gameOverlay.setAttribute('aria-hidden','true'); input.focus(); }
+    stopGame = closeGame;
+
+    function chicken(x:number,y:number) {
+      ctx.fillStyle = '#f4c84a'; ctx.fillRect(x+8,y+8,22,18); ctx.fillRect(x+14,y+3,12,8);
+      ctx.fillStyle = '#fff1b8'; ctx.fillRect(x+4,y+12,7,10); ctx.fillRect(x+29,y+12,7,10);
+      ctx.fillStyle = '#ff6542'; ctx.fillRect(x+18,y,4,5); ctx.fillRect(x+38,y+12,5,4);
+      ctx.fillStyle = '#151d19'; ctx.fillRect(x+23,y+8,3,3);
+    }
+    function draw() {
+      if (!running) return;
+      frame++;
+      if (keys.has('arrowleft') || keys.has('a')) player.x = Math.max(8, player.x - 5);
+      if (keys.has('arrowright') || keys.has('d')) player.x = Math.min(canvas.width-player.w-8, player.x + 5);
+      if (keys.has(' ') && frame-lastShot > 10) { shots.push({x:player.x+21,y:player.y}); lastShot=frame; }
+      if (frame % 75 === 0) { const alive=chickens.filter(c=>c.alive); if(alive.length){const c=alive[Math.floor(Math.random()*alive.length)];eggs.push({x:c.x+20,y:c.y+25});} }
+      shots.forEach(s=>s.y-=7); eggs.forEach(e=>e.y+=3.2);
+      shots = shots.filter(s=>s.y>-10); eggs = eggs.filter(e=>e.y<canvas.height+10);
+      chickens.forEach(c=>{if(!c.alive)return; shots.forEach((s,i)=>{if(s.x>c.x&&s.x<c.x+42&&s.y>c.y&&s.y<c.y+32){c.alive=false;shots.splice(i,1);score+=100;scoreEl.textContent=String(score).padStart(4,'0');}})});
+
+      ctx.fillStyle='#09110e';ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='rgba(70,210,150,.14)';for(let i=0;i<45;i++)ctx.fillRect((i*83)%canvas.width,(i*47+frame*.25)%canvas.height,1,1);
+      ctx.strokeStyle='#57d99e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(player.x,player.y+18);ctx.lineTo(player.x+22,player.y);ctx.lineTo(player.x+44,player.y+18);ctx.closePath();ctx.stroke();
+      ctx.fillStyle='#ff7252';shots.forEach(s=>ctx.fillRect(s.x,s.y,3,9));
+      ctx.fillStyle='#f7f0d8';eggs.forEach(e=>{ctx.beginPath();ctx.ellipse(e.x,e.y,4,6,0,0,Math.PI*2);ctx.fill();});
+      chickens.forEach(c=>{if(c.alive)chicken(c.x+Math.sin((frame+c.phase*9)/45)*18,c.y)});
+      if(chickens.every(c=>!c.alive)){ctx.fillStyle='#57d99e';ctx.font='700 28px JetBrains Mono';ctx.textAlign='center';ctx.fillText('SYSTEM SECURED ✓',canvas.width/2,canvas.height/2);}
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+  function closeCurrentGame(){ stopGame?.(); }
+  window.addEventListener('launch-invaders', launchInvaders);
+  gameClose.addEventListener('click', closeCurrentGame);
 </script>

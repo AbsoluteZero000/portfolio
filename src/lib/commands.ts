@@ -163,7 +163,9 @@ function ls(path: string, ctx: CommandContext): OutputLine[] {
     return Object.keys(FILESYSTEM).map(k => {
       const entry = FILESYSTEM[k];
       const isDir = typeof entry === 'object';
-      const display = isDir ? `${k}/` : k;
+      // Keep the interface approachable: labels look like sections, not
+      // directories that imply unsupported `cd` navigation.
+      const display = k;
       const action = isDir ? `ls ${k}/` : `cat ${k}`;
       return {
         html: cmdSpan(action, display),
@@ -454,6 +456,44 @@ export const COMMANDS: CommandMap = {
     ],
     description: 'Close the connection',
     usage: 'exit',
+  },
+  invaders: {
+    fn: () => [
+      { html: '<span class="game-launch" data-game="invaders">Booting CHICKEN.EXE...</span>', type: 'system' },
+      { html: 'Arrow keys / A D to move · Space to fire · Esc to quit', type: 'info' },
+    ],
+    description: 'Definitely not a hidden game',
+    usage: 'invaders',
+  },
+  coffee: {
+    fn: () => [
+      { html: 'Compiling coffee...', type: 'system' },
+      { html: 'Error: developer already at maximum caffeine capacity ☕', type: 'warning' },
+    ],
+    description: 'Compile some motivation',
+    usage: 'coffee',
+  },
+  fortune: {
+    fn: () => {
+      const fortunes = [
+        'There are only two hard things in Computer Science: cache invalidation, naming things, and off-by-one errors.',
+        'A clean API is worth a thousand meetings.',
+        'It works on my machine — so we are shipping my machine.',
+        'The best distributed system is the one you did not need to distribute.',
+      ];
+      return [{ html: `“${fortunes[Math.floor(Math.random() * fortunes.length)]}”`, type: 'info' }];
+    },
+    description: 'Print questionable engineering wisdom',
+    usage: 'fortune',
+  },
+  hack: {
+    fn: () => [
+      { html: 'Connecting to mainframe...', type: 'system' },
+      { html: '[████████████████████] 100%', type: 'success' },
+      { html: 'Access granted. Just kidding — nice try, operator.', type: 'warning' },
+    ],
+    description: 'Hack the planet',
+    usage: 'hack',
   },
 };
 

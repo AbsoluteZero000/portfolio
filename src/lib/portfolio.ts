@@ -100,6 +100,12 @@ Java · Go · Python · Distributed Systems
 
   projects: [
     {
+      title: 'WhatSend',
+      stack: 'Python, FastAPI, SQLAlchemy, HTMX, APScheduler, Docker',
+      description: 'Built and deployed a production-ready WhatsApp automation platform with instant, one-time, recurring, and on-demand scheduling through Whapi.Cloud. Features encrypted API tokens, multi-user authentication, per-user timezones, image uploads, execution logs, Arabic RTL support, and a persistent scheduler deployed on Fly.io.',
+      github: 'https://github.com/AbsoluteZero000/whatsend',
+    },
+    {
       title: 'Code Execution System',
       stack: 'Rust, JavaScript',
       description: 'Architected a sandboxed backend system for secure, isolated code execution, handling dynamic dependency resolution at runtime without manual setup. Designed for fault tolerance and security-first operation.',
@@ -128,12 +134,6 @@ Java · Go · Python · Distributed Systems
       stack: 'Rust, JavaScript',
       description: 'A sandboxed code execution environment for running untrusted code securely. Handles dynamic dependency resolution and provides isolated execution contexts.',
       github: 'https://github.com/envicutor/envicutor',
-    },
-    {
-      title: 'WhatSend',
-      stack: 'Python, FastAPI, SQLAlchemy, HTMX, APScheduler',
-      description: 'WhatsApp message scheduler with a browser dashboard. Send now or schedule recurring messages via Whapi.Cloud. Features group picker, image upload, per-user timezone, token encryption, and expandable execution logs.',
-      github: 'https://github.com/AbsoluteZero000/whatsend',
     },
   ],
 
