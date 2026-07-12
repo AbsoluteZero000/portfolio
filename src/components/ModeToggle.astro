@@ -14,18 +14,23 @@
   [data-mode="simple"] .mode-toggle-terminal { display: none !important; }
 
   .simple-mode-toggle {
-    background: #f5f5f4;
-    border: 1px solid #d6d3d1;
-    color: #44403c;
+    background: transparent;
+    border: 1px solid var(--gui-border-strong);
+    color: var(--gui-text);
     font-family: "JetBrains Mono", monospace;
     font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 4px;
+    padding: 8px 13px;
+    border-radius: 99px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: border-color 0.15s, color .15s;
   }
 
   .simple-mode-toggle:hover {
-    background: #e7e5e4;
+    border-color: var(--gui-accent);
+    color: var(--gui-accent);
+  }
+
+  @media (max-width: 420px) {
+    .simple-mode-toggle { font-size: 10px; padding: 7px 9px; }
   }
 </style>

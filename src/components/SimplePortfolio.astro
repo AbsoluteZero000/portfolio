@@ -10,13 +10,16 @@ import { PORTFOLIO } from '../lib/portfolio';
 
 <div class="gui-wrapper">
   <nav class="gui-nav">
-    <span class="gui-nav-brand">{PORTFOLIO.name.toLowerCase()}</span>
+    <a class="gui-nav-brand" href="#top" aria-label="Back to top">
+      <span class="brand-mark">AW</span>
+      <span class="brand-copy">Ahmed Wanas<small>Backend engineer</small></span>
+    </a>
     <div class="gui-nav-links">
-      <a href="#skills">skills</a>
-      <a href="#experience">experience</a>
-      <a href="#projects">projects</a>
-      <a href="#contact">contact</a>
-      <button class="simple-theme-toggle" id="simple-theme-toggle" title="Toggle dark mode">☾</button>
+      <a href="#experience">Experience</a>
+      <a href="#projects">Work</a>
+      <a href="#skills">Toolkit</a>
+      <a href="#contact">Contact</a>
+      <button class="simple-theme-toggle" id="simple-theme-toggle" title="Toggle color theme" aria-label="Toggle color theme">☾</button>
       <ModeToggle />
     </div>
   </nav>
@@ -28,10 +31,4 @@ import { PORTFOLIO } from '../lib/portfolio';
     <SimpleProjects />
     <SimpleContact />
   </div>
-</div>
-<div class="simple-cta">
-  <a href={PORTFOLIO.resume} target="_blank" rel="noopener noreferrer" aria-label="Download Resume">↓ Resume</a>
-  <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">GitHub</a>
-  <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">LinkedIn</a>
-  <a href={`mailto:${PORTFOLIO.email}`} aria-label="Send email">✉ Email</a>
 </div>

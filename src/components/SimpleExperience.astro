@@ -3,19 +3,19 @@ import { PORTFOLIO, highlightTech } from '../lib/portfolio';
 ---
 
 <section class="gui-section" id="experience">
-  <h2 class="gui-section-title">experience</h2>
+  <div class="section-heading"><span>01 / EXPERIENCE</span><h2>Where I’ve made<br />an impact.</h2><p>Building dependable software across product, enterprise, and infrastructure teams.</p></div>
   <div class="gui-exp-list">
     {PORTFOLIO.experience.map(exp => (
-      <div class="gui-exp-item">
+      <article class="gui-exp-item">
         <div class="gui-exp-header">
-          <div class="gui-exp-role">{exp.role}</div>
           <div class="gui-exp-company">{exp.company}</div>
-          <div class="gui-exp-meta">{exp.period} &middot; {exp.location}</div>
+          <div class="gui-exp-meta">{exp.period}</div>
         </div>
+        <div class="gui-exp-role">{exp.role}<small>{exp.location}</small></div>
         <ul class="gui-exp-highlights">
           {exp.highlights.map(h => <li set:html={highlightTech(h)}></li>)}
         </ul>
-      </div>
+      </article>
     ))}
   </div>
 </section>

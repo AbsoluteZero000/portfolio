@@ -3,9 +3,12 @@ import { PORTFOLIO } from '../lib/portfolio';
 ---
 
 <section class="gui-contact" id="contact">
-  <p>Want to get in touch?</p>
+  <span class="contact-kicker">04 / LET’S TALK</span>
+  <h2>Have a hard problem<br />worth solving?</h2>
+  <p>I’m always open to thoughtful conversations, interesting products, and strong engineering teams.</p>
+  <a class="contact-email" href={`mailto:${PORTFOLIO.email}`}>Start a conversation <span>↗</span></a>
   <div class="gui-contact-links">
-    <a href={`mailto:${PORTFOLIO.email}`}>{PORTFOLIO.email}</a>
+    <span>© {new Date().getFullYear()} {PORTFOLIO.name}</span>
     <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
     <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
     <a href={PORTFOLIO.social.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>

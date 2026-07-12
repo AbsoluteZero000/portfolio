@@ -3,15 +3,16 @@ import { PORTFOLIO, highlightTech } from '../lib/portfolio';
 ---
 
 <section class="gui-section" id="projects">
-  <h2 class="gui-section-title">projects</h2>
+  <div class="section-heading"><span>02 / SELECTED WORK</span><h2>Things I’ve built.</h2><p>Production-minded systems, developer tools, and experiments I’m proud of.</p></div>
   <div class="gui-projects-grid">
     {PORTFOLIO.projects.map(p => (
-      <div class="gui-project-card">
+      <article class="gui-project-card">
+        <div class="project-index">{String(PORTFOLIO.projects.indexOf(p) + 1).padStart(2, '0')}</div>
         <h3 class="gui-project-title">{p.title}</h3>
         <div class="gui-project-stack">{p.stack}</div>
         <p class="gui-project-desc" set:html={highlightTech(p.description)}></p>
-        {p.github && <a href={p.github} class="gui-project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>}
-      </div>
+        {p.github && <a href={p.github} class="gui-project-link" target="_blank" rel="noopener noreferrer" aria-label={`View ${p.title} on GitHub`}>View project <span>↗</span></a>}
+      </article>
     ))}
   </div>
 </section>

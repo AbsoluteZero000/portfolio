@@ -2,35 +2,33 @@
 import { PORTFOLIO } from '../lib/portfolio';
 ---
 
-<section class="gui-hero">
+<section class="gui-hero" id="top">
   <div class="gui-hero-content">
-    <h1>{PORTFOLIO.name}</h1>
-    <p class="gui-hero-subtitle">{PORTFOLIO.title}</p>
-    <p class="gui-hero-tagline">{PORTFOLIO.tagline}</p>
+    <div class="availability"><span></span> Available for ambitious backend work</div>
+    <p class="gui-hero-eyebrow">Hello, I’m Ahmed — a backend engineer in Giza.</p>
+    <h1>I build the systems<br />behind <em>great products.</em></h1>
+    <p class="gui-hero-tagline">{PORTFOLIO.summary}</p>
     <div class="gui-hero-ctas">
-      <a href="#projects" class="gui-cta gui-cta--primary">View Projects</a>
-      <a href={PORTFOLIO.resume} class="gui-cta gui-cta--secondary" target="_blank" rel="noopener noreferrer">Download Resume</a>
-      <a href="#contact" class="gui-cta gui-cta--secondary">Contact Me</a>
+      <a href="#projects" class="gui-cta gui-cta--primary">Explore my work <span>↗</span></a>
+      <a href={PORTFOLIO.resume} class="gui-cta gui-cta--secondary" target="_blank" rel="noopener noreferrer">Résumé <span>↓</span></a>
     </div>
     <div class="gui-social">
-      <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub</a>
-      <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href={PORTFOLIO.social.leetcode} target="_blank" rel="noopener noreferrer">LeetCode</a>
-      <a href={`mailto:${PORTFOLIO.email}`}>Email</a>
+      <span>Find me on</span>
+      <a href={PORTFOLIO.social.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+      <a href={PORTFOLIO.social.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+      <a href={`mailto:${PORTFOLIO.email}`}>Email ↗</a>
     </div>
   </div>
   <div class="gui-hero-visual" aria-hidden="true">
+    <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
     <div class="gui-hero-terminal">
-      <div class="gui-hero-terminal-dots">
-        <span></span><span></span><span></span>
+      <div class="terminal-bar"><div class="gui-hero-terminal-dots"><span></span><span></span><span></span></div><span>ahmed@portfolio ~</span></div>
+      <div class="terminal-body">
+        <div><span class="gui-hero-prompt">❯</span> <span class="gui-hero-cmd">cat profile.json</span></div>
+        <div class="code-block"><span>{`{`}</span><br />&nbsp;&nbsp;<b>"role"</b>: <i>"Backend Engineer"</i>,<br />&nbsp;&nbsp;<b>"focus"</b>: [<i>"APIs"</i>, <i>"Distributed Systems"</i>],<br />&nbsp;&nbsp;<b>"stack"</b>: [<i>"Java"</i>, <i>"Go"</i>, <i>"Python"</i>],<br />&nbsp;&nbsp;<b>"status"</b>: <i>"building"</i><br /><span>{`}`}</span></div>
+        <div class="terminal-success">✓ All systems operational</div>
+        <div><span class="gui-hero-prompt">❯</span> <span class="cursor"></span></div>
       </div>
-      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">whoami</span></div>
-      <div class="gui-hero-terminal-line gui-hero-output">{PORTFOLIO.name}</div>
-      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">cat tagline</span></div>
-      <div class="gui-hero-terminal-line gui-hero-output">{PORTFOLIO.tagline}</div>
-      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">echo $LOCATION</span></div>
-      <div class="gui-hero-terminal-line gui-hero-output">{PORTFOLIO.location}</div>
-      <div class="gui-hero-terminal-line"><span class="gui-hero-prompt">$</span> <span class="gui-hero-cmd">_</span></div>
     </div>
   </div>
 </section>
