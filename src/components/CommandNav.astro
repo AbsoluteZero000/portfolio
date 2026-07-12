@@ -1,39 +1,47 @@
 <div class="cmd-nav">
-  <button class="cmd-chip" data-cmd="ls projects/">projects</button>
-  <button class="cmd-chip" data-cmd="cat experience">experience</button>
-  <button class="cmd-chip" data-cmd="cat skills">skills</button>
-  <button class="cmd-chip" data-cmd="whoami">about</button>
-  <button class="cmd-chip" data-cmd="contact">contact</button>
+  <span>quick commands</span>
+  <button class="cmd-chip" data-cmd="ls projects/"><b>⌘</b> projects</button>
+  <button class="cmd-chip" data-cmd="cat experience"><b>⌘</b> experience</button>
+  <button class="cmd-chip" data-cmd="cat skills"><b>⌘</b> skills</button>
+  <button class="cmd-chip" data-cmd="contact"><b>⌘</b> contact</button>
 </div>
 
 <style>
   .cmd-nav {
     display: flex;
     gap: 8px;
-    padding: 0 20px 8px;
+    align-items: center;
+    padding: 0;
+    margin-left: auto;
     flex-shrink: 0;
     flex-wrap: wrap;
   }
 
+  .cmd-nav > span { color: var(--fg-dim); font-size: 9px; text-transform: uppercase; letter-spacing: .1em; }
+
   .cmd-chip {
-    background: var(--bg-dim);
-    border: 1px solid var(--border);
-    color: var(--accent);
+    background: transparent;
+    border: 0;
+    color: var(--fg-dim);
     font-family: inherit;
     font-size: 12px;
-    padding: 4px 12px;
+    padding: 5px 7px;
     border-radius: 4px;
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
   }
+  .cmd-chip b { color: var(--accent); font-weight: 400; }
 
   .cmd-chip:hover {
-    background: var(--border);
-    border-color: var(--accent-dim);
+    background: var(--bg-dim);
+    color: var(--fg-bright);
   }
 
   .cmd-chip:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
+
+  @media (max-width: 720px) { .cmd-nav > span, .cmd-chip b { display:none; } .cmd-nav { gap:2px; } .cmd-chip { font-size:10px; padding:5px; } }
+  @media (max-width: 480px) { .cmd-nav { display:none; } }
 </style>

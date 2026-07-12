@@ -31,7 +31,8 @@ import { THEMES } from '../lib/themes';
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 't' && !e.ctrlKey && !e.metaKey && !(e.target instanceof HTMLInputElement)) {
+    const input = document.getElementById('terminal-input');
+    if (e.key === 't' && !e.ctrlKey && !e.metaKey && e.target !== input) {
       const current = getCurrentTheme();
       const next = getNextTheme(current);
       applyTheme(next);

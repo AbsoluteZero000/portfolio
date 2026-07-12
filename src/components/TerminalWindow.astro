@@ -11,66 +11,38 @@ import CommandNav from './CommandNav.astro';
       <span class="terminal-dot terminal-dot--minimize"></span>
       <span class="terminal-dot terminal-dot--maximize"></span>
     </div>
-    <span class="terminal-title">ahmed@portfolio — bash — 80×24</span>
+    <span class="terminal-title"><span>⌁</span> ahmed@portfolio: ~</span>
+    <span class="terminal-session">● secure session</span>
   </div>
 
-  <CommandNav />
+  <div class="terminal-toolbar">
+    <span class="terminal-tab"><span>~/portfolio</span><b>×</b></span>
+    <span class="terminal-add">＋</span>
+    <CommandNav />
+  </div>
 
   <div class="terminal-body">
     <div class="terminal-output" id="terminal-output" role="log" aria-live="polite">
-      <div class="terminal-line terminal-line--system">Last login: Sun May 10 2026 from visiting-portfolio</div>
-      <div class="terminal-line terminal-line--raw"></div>
-      <div class="terminal-line terminal-line--raw">
-        <span class="crt-glow-strong" style="font-size: 1.4rem; font-weight: 700; color: var(--fg-bright);">Ahmed Wanas</span>
+      <div class="terminal-line terminal-line--system">Last login: today from visitor@portfolio</div>
+      <div class="terminal-welcome">
+        <div class="welcome-ascii" aria-hidden="true"><span>╭────────╮</span><br/>│ <b>AW</b>  ❯_ │<br/><span>╰────────╯</span></div>
+        <div class="welcome-copy">
+          <span class="welcome-label">BACKEND SOFTWARE ENGINEER</span>
+          <h1>Ahmed Wanas</h1>
+          <p>Building scalable APIs, distributed systems,<br/>and cloud-native backends.</p>
+          <div class="welcome-meta"><span>● Giza, Egypt</span><span>Java / Go / Python</span><span>Open to work</span></div>
+        </div>
       </div>
-      <div class="terminal-line terminal-line--raw">
-        <span style="color: var(--accent);">Backend Software Engineer</span>
-        <span style="color: var(--fg-dim);"> · </span>
-        <span class="crt-glow" style="color: var(--accent);">Linux enthusiast</span>
-        <span style="color: var(--fg-dim);"> · </span>
-        <span style="color: var(--fg);">Java, Go, Python, Distributed Systems</span>
-      </div>
-      <div class="terminal-line terminal-line--raw" style="margin: 2px 0;">
-        <span style="color: var(--fg-dim);">Giza, Egypt</span>
-        <span style="color: var(--fg-dim);">  |  </span>
-        <a href="mailto:ahmedwaelwanas@gmail.com" class="terminal-link">ahmedwaelwanas@gmail.com</a>
-      </div>
-      <div class="terminal-line terminal-line--raw" style="margin: 2px 0 0 0;">
-        <a href="https://github.com/AbsoluteZero000" class="terminal-link" target="_blank">GitHub</a>
-        <span style="color: var(--fg-dim);"> | </span>
-        <a href="https://www.linkedin.com/in/ahmedwaelwanas" class="terminal-link" target="_blank">LinkedIn</a>
-        <span style="color: var(--fg-dim);"> | </span>
-        <a href="https://leetcode.com/u/ahmedwaelwanas/" class="terminal-link" target="_blank">LeetCode</a>
-      </div>
-      <div class="terminal-line terminal-line--raw"></div>
-      <div class="terminal-line terminal-line--separator" style="color: var(--fg-dim);">
-        ────────────────────────────────────────────────────────────────
-      </div>
-      <div class="terminal-line terminal-line--raw"></div>
-      <div class="terminal-line terminal-line--info">
-        <span style="font-size: 1.1rem;">
-          <span class="crt-glow-strong">❯</span>
-          <strong><span class="terminal-link crt-glow-strong" data-cmd="ls projects/" style="color: var(--accent); font-size: 1.1rem;">projects/</span></strong>
-          <span style="color: var(--fg-dim);">  ·  </span>
-          <strong><span class="terminal-link crt-glow-strong" data-cmd="ls experience/" style="color: var(--accent); font-size: 1.1rem;">experience/</span></strong>
-          <span style="color: var(--fg-dim);">  ·  </span>
-          <strong><span class="terminal-link crt-glow-strong" data-cmd="cat skills" style="color: var(--accent); font-size: 1.1rem;">skills</span></strong>
-        </span>
-      </div>
-      <div class="terminal-line terminal-line--info" style="margin-top: 4px;">
-        <span style="color: var(--fg-dim);">Type <span class="terminal-link" data-cmd="help">help</span> for all commands  ·  Press <span class="crt-glow">T</span> to cycle themes</span>
-      </div>
-      <div class="terminal-line terminal-line--raw"></div>
+      <div class="terminal-hint"><span>QUICK START</span> Run <button data-cmd="ls projects/">ls projects/</button>, <button data-cmd="cat experience">cat experience</button>, or <button data-cmd="help">help</button> to explore.</div>
     </div>
 
     <div class="terminal-input-container">
-      <span class="terminal-prompt crt-glow">ahmed@portfolio:~$</span>
-      <span class="terminal-cursor cursor-blink"></span>
+      <span class="terminal-prompt"><b>ahmed</b><i>@</i><b>portfolio</b><span> ~/portfolio</span></span>
       <input
         type="text"
         class="terminal-input"
         id="terminal-input"
-        placeholder="type a command..."
+        placeholder="Type a command…"
         autofocus
         spellcheck="false"
         autocomplete="off"
@@ -80,14 +52,14 @@ import CommandNav from './CommandNav.astro';
 
   <div class="terminal-statusbar">
     <span>
-      <span id="clock"></span>
+      <span class="status-ready">●</span> READY <span class="status-divider">│</span> <span id="clock"></span>
     </span>
     <div class="terminal-statusbar-right">
       <span class="terminal-statusbar-button" id="github-btn" title="Open GitHub">
-        GitHub
+        github ↗
       </span>
       <span class="terminal-statusbar-button" id="linkedin-btn" title="Open LinkedIn">
-        LinkedIn
+        linkedin ↗
       </span>
       <ThemeSwitcher />
       <ModeToggle />
